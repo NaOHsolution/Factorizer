@@ -8,41 +8,38 @@ using namespace std;
 
 typedef unsigned long long ull;
 
+ull primes[100] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+
 vector<pair<ull, short>> factorize(ull t) {
 	vector<pair<ull, short>> res;
 	short cnt = 0;
 	
-	if (t % 2 == 0) { // 2
-		cnt = 0;
-		while (t % 2 == 0) t /= 2, ++cnt;
-		res.push_back(pair<ull, short>(2, cnt));
-	}
-	if (t == 1) return res;
-	else if (t % 3 == 0) { // 3
-		cnt = 0;
-		while (t % 3 == 0) t /= 3, ++cnt;
-		res.push_back(pair<ull, short>(3, cnt));
-	}
-	if (t == 1) return res;
-	else { // the rest
-		ull f = 6, dest = t / 3;
-		while (f - 1 <= dest) {
-			if (t % (f - 1) == 0) {
-				cnt = 0;
-				while (t % (f - 1) == 0) t /= (f - 1), ++cnt;
-				res.push_back(pair<ull, short>(f - 1, cnt));
-			}
-			if (t % (f + 1) == 0) {
-				cnt = 0;
-				while (t % (f + 1) == 0) t /= (f + 1), ++cnt;
-				res.push_back(pair<ull, short>(f + 1, cnt));
-			}
-
-			f += 6;
+	for (int i = 0; i < 25; ++i) {
+		ull p = primes[i];
+		if (t % p == 0) {
+			cnt = 0;
+			while (t % p == 0) t /= p, ++cnt;
+			res.push_back(pair<ull, short>(p, cnt));
 		}
+		if (t == 1) return res;
+	}
+	ull f = 102, dest = t / 97;
+	while (f - 1 <= dest) {
+		if (t % (f - 1) == 0) {
+			cnt = 0;
+			while (t % (f - 1) == 0) t /= (f - 1), ++cnt;
+			res.push_back(pair<ull, short>(f - 1, cnt));
+		}
+		if (t % (f + 1) == 0) {
+			cnt = 0;
+			while (t % (f + 1) == 0) t /= (f + 1), ++cnt;
+			res.push_back(pair<ull, short>(f + 1, cnt));
+		}
+
+		f += 6;
 	}
 
-	if (res.empty()) res.push_back(pair<ull, short>(t, 1));
+	if (t != 1) res.push_back(pair<ull, short>(t, 1));
 	return res;
 }
 
