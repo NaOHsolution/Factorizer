@@ -25,8 +25,8 @@ vector<pair<ull, short>> factorize(ull t) {
 	}
 	if (t == 1) return res;
 	else { // the rest
-		ull f = 6;
-		while (f - 1 <= t) {
+		ull f = 6, dest = t / 3;
+		while (f - 1 <= dest) {
 			if (t % (f - 1) == 0) {
 				cnt = 0;
 				while (t % (f - 1) == 0) t /= (f - 1), ++cnt;
@@ -42,6 +42,7 @@ vector<pair<ull, short>> factorize(ull t) {
 		}
 	}
 
+	if (res.empty()) res.push_back(pair<ull, short>(t, 1));
 	return res;
 }
 
