@@ -8,14 +8,48 @@ using namespace std;
 
 typedef unsigned long long ull;
 
-ull number;
-vector<pair<ull, short>> result;
+vector<pair<ull, short>> factorize(ull t) {
+	vector<pair<ull, short>> res;
+	short cnt = 0;
+	
+	if (t % 2 == 0) { // 2
+		cnt = 0;
+		while (t % 2 == 0) t /= 2, ++cnt;
+		res.push_back(pair<ull, short>(2, cnt));
+	}
+	if (t == 1) return res;
+	else if (t % 3 == 0) { // 3
+		cnt = 0;
+		while (t % 3 == 0) t /= 3, ++cnt;
+		res.push_back(pair<ull, short>(3, cnt));
+	}
+	if (t == 1) return res;
+	else { // the rest
+		ull f = 6;
+		while (f - 1 <= t) {
+			if (t % (f - 1) == 0) {
+				cnt = 0;
+				while (t % (f - 1) == 0) t /= (f - 1), ++cnt;
+				res.push_back(pair<ull, short>(f - 1, cnt));
+			}
+			if (t % (f + 1) == 0) {
+				cnt = 0;
+				while (t % (f + 1) == 0) t /= (f + 1), ++cnt;
+				res.push_back(pair<ull, short>(f + 1, cnt));
+			}
+
+			f += 6;
+		}
+	}
+
+	return res;
+}
 
 int main() {
-	ull t;
-	short cnt;
+	ull number;
 	string buf;
 	stringstream m;
+	vector<pair<ull, short>> result;
 
 	while (true) {
 		m.clear();
@@ -31,17 +65,8 @@ int main() {
 		}
 
 		if (number == 0) break;
-
-		t = number;
-		result.clear();
 		if (number != 1) {
-			for (ull i = 2; i <= t; ++i) {
-				if (t % i == 0) {
-					cnt = 0;
-					while (t % i == 0) t /= i, ++cnt;
-					result.push_back(pair<ull, short>(i, cnt));
-				}
-			}
+			result = factorize(number);
 
 			cout << endl << number << " = ";
 			for (vector<pair<ull, short>>::iterator itr = result.begin(); itr != result.end(); ++itr) {
@@ -50,7 +75,7 @@ int main() {
 				if (itr + 1 != result.end()) cout << " x ";
 			}
 			cout << endl;
-			if (result.size() == 1) cout << number << " is prime.";
+			if (result.size() == 1 && result.begin()->second == 1) cout << number << " is prime.";
 			else cout << number << " is composite.";
 		}
 		else cout << endl << "1 is neither prime nor composite.";
