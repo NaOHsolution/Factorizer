@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -47,11 +48,14 @@ vector<pair<ull, short>> factorize(ull t) {
 
 vector<ull> factors(ull t) {
 	vector<ull> res;
-	res.push_back(1ull);
 
-	for (ull i = 2; i <= t; ++i) {
-		if (t % i == 0) res.push_back(i);
+	for (ull i = 1; i <= sqrt(t); ++i) {
+		if (t % i == 0) {
+			res.push_back(i);
+			if (i * i != t) res.push_back(t / i);
+		}
 	}
+	sort(res.begin(), res.end());
 
 	return res;
 }
@@ -61,16 +65,30 @@ int main() {
 	char op;
 	string buf;
 	stringstream m;
+	bool flag = false;
+
+	cout << "Factorizer 1.3.2" << endl << "Creator: NaOHsolution" << endl << endl;
 	
 	while (true) {
 		m.clear();
 		m.str("");
 		cout << "Enter the number (0 to exit):" << endl << "> ";
 		getline(cin, buf, '\n');
+		for (int i = 0; i < buf.size(); ++i) {
+			if (buf[i] < '0' || buf[i] > '9') {
+				cout << endl << "Invalid input." << endl << endl;
+				flag = true;
+				break;
+			}
+		}
+		if (flag) {
+			flag = false;
+			continue;
+		}
 		m << buf;
 		m >> number;
 		if (m.fail()) {
-			cout << endl << "Invalid input." << endl << endl;
+			cout << endl << "The number is too big to handle. Please enter a number less than 18,446,744,073,709,551,616" << endl << endl;
 			continue;
 		}
 		if (number == 0) break;
@@ -78,13 +96,12 @@ int main() {
 		m.str("");
 		cout << endl << "Select an operation: " << endl << "[p] Factorize the number into its prime factors" << endl << "[f] Find out all of the number's factors" << endl << "> ";
 		getline(cin, buf, '\n');
-		m << buf;
-		m >> op;
-		if (m.fail() || (op != 'p' && op != 'f')) {
+		if (buf != "p" && buf != "f") {
 			cout << endl << "Invalid input." << endl << endl;
 			continue;
 		}
 
+		op = buf[0];
 		switch (op) {
 		case 'p':
 			if (number != 1) {

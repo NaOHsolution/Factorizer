@@ -1,2 +1,3 @@
 ﻿  main.cpp
+D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(77,21): warning C4018: “<”: 有符号/无符号不匹配
   Factorizer.vcxproj -> D:\编程\C++\Factorizer\Factorizer\Debug\Factorizer.exe
