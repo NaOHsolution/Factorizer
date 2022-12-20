@@ -29,11 +29,13 @@ vector<pair<ull, short>> factorize(ull t) {
 			cnt = 0;
 			while (t % (f - 1) == 0) t /= (f - 1), ++cnt;
 			res.push_back(pair<ull, short>(f - 1, cnt));
+			dest = t / (f - 1);
 		}
 		if (t % (f + 1) == 0) {
 			cnt = 0;
 			while (t % (f + 1) == 0) t /= (f + 1), ++cnt;
 			res.push_back(pair<ull, short>(f + 1, cnt));
+			dest = t / (f + 1);
 		}
 
 		f += 6;
