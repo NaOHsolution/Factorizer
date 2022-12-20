@@ -1,2 +1,2 @@
 # Factorizer
- A program that factorizes the input into its prime factors.
+ A program that can factorize the input into its prime factors or find out all of the input's factors
