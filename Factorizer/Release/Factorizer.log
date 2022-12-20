@@ -1,7 +1,7 @@
 ﻿  main.cpp
   正在生成代码
-  5 of 548 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  84 of 612 functions (13.7%) were compiled, the rest were copied from previous compilation.
+    68 functions were new in current compilation
+    65 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Factorizer.vcxproj -> D:\编程\C++\Factorizer\Factorizer\Release\Factorizer.exe

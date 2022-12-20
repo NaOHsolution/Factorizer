@@ -43,17 +43,27 @@ vector<pair<ull, short>> factorize(ull t) {
 	return res;
 }
 
+vector<ull> factors(ull t) {
+	vector<ull> res;
+	res.push_back(1ull);
+
+	for (ull i = 2; i <= t; ++i) {
+		if (t % i == 0) res.push_back(i);
+	}
+
+	return res;
+}
+
 int main() {
 	ull number;
+	char op;
 	string buf;
 	stringstream m;
-	vector<pair<ull, short>> result;
-
+	
 	while (true) {
 		m.clear();
 		m.str("");
-
-		cout << "Enter the number to be factorized (0 to exit): ";
+		cout << "Enter the number (0 to exit):" << endl << "> ";
 		getline(cin, buf, '\n');
 		m << buf;
 		m >> number;
@@ -61,22 +71,52 @@ int main() {
 			cout << endl << "Invalid input." << endl << endl;
 			continue;
 		}
-
 		if (number == 0) break;
-		if (number != 1) {
-			result = factorize(number);
+		m.clear();
+		m.str("");
+		cout << endl << "Select an operation: " << endl << "[p] Factorize the number into its prime factors" << endl << "[f] Find out all of the number's factors" << endl << "> ";
+		getline(cin, buf, '\n');
+		m << buf;
+		m >> op;
+		if (m.fail() || (op != 'p' && op != 'f')) {
+			cout << endl << "Invalid input." << endl << endl;
+			continue;
+		}
 
-			cout << endl << number << " = ";
-			for (vector<pair<ull, short>>::iterator itr = result.begin(); itr != result.end(); ++itr) {
-				if (itr->second == 1) cout << itr->first;
-				else cout << itr->first << " ^ " << itr->second;
-				if (itr + 1 != result.end()) cout << " x ";
+		switch (op) {
+		case 'p':
+			if (number != 1) {
+				vector<pair<ull, short>> result = factorize(number);
+
+				cout << endl << number << " = ";
+				for (vector<pair<ull, short>>::iterator itr = result.begin(); itr != result.end(); ++itr) {
+					if (itr->second == 1) cout << itr->first;
+					else cout << itr->first << " ^ " << itr->second;
+					if (itr + 1 != result.end()) cout << " x ";
+				}
+				cout << endl;
+				if (result.size() == 1 && result.begin()->second == 1) cout << number << " is prime.";
+				else cout << number << " is composite.";
+			}
+			else cout << endl << "1 is neither prime nor composite.";
+
+			break;
+		case 'f':
+			vector<ull> result = factors(number);
+
+			cout << endl << "Factors: ";
+			for (vector<ull>::iterator itr = result.begin(); itr != result.end(); ++itr) {
+				cout << *itr;
+				if (itr + 1 != result.end()) cout << ", ";
 			}
 			cout << endl;
-			if (result.size() == 1 && result.begin()->second == 1) cout << number << " is prime.";
+			if (result.size() == 1) cout << "1 is neither prime nor composite.";
+			else if (result.size() == 2) cout << number << " is prime.";
 			else cout << number << " is composite.";
+
+			break;
 		}
-		else cout << endl << "1 is neither prime nor composite.";
+		
 		cout << endl << endl;
 	}
 	
