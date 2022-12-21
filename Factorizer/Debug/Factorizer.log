@@ -1,5 +1,5 @@
 ﻿  main.cpp
-D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(172,20): warning C4018: “<”: 有符号/无符号不匹配
-D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(199,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(159,6): warning C4101: “temp”: 未引用的局部变量
+D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(171,20): warning C4018: “<”: 有符号/无符号不匹配
+D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(198,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(158,6): warning C4101: “temp”: 未引用的局部变量
   Factorizer.vcxproj -> D:\编程\C++\Factorizer\Factorizer\Debug\Factorizer.exe

@@ -127,7 +127,7 @@ vector<ull> factors(ull t) {
 }
 
 void display() {
-	cout << "Factorizer 1.4.1" << endl << "By NaOHsolution" << endl << endl << "Syntax:" << endl << "-d/-e source -p/-f [output]" << endl << endl;
+	cout << "Factorizer 1.4.2" << endl << "By NaOHsolution" << endl << endl << "Syntax:" << endl << "-d/-e source -p/-f [output]" << endl << endl;
 	cout << "Parameters: " << endl;
 	cout << "-d/-e \t Where the number(s) comes from. -d stands\n\t for direct input, -e stands for external\n\t source (file)." << endl;
 	cout << "source \t What the number(s) is. If the previous\n\t parameter is -d, just enter the number; if\n\t it is -e, enter the directory of the input file." << endl;
@@ -187,7 +187,7 @@ input handleInput(string t) {
 		}
 	}
 	if (!hasType) throw syntaxError(NO_TYPE);
-	if (2 >= index1 - 2) throw syntaxError(NO_INPUT);
+	if (2 > index1 - 2) throw syntaxError(NO_INPUT);
 	buf = t.substr(2, index1 - 2);
 	while (buf[0] == ' ' && buf.size() > 1) buf.erase(0, 1);
 	while (buf[buf.size() - 1] == ' ' && buf.size() > 1) buf.erase(buf.size() - 1, 1);
