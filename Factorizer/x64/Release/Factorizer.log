@@ -1,0 +1,7 @@
+﻿  main.cpp
+D:\编程\C++\Factorizer\Factorizer\Factorizer\main.cpp(127,6): warning C4101: “temp”: 未引用的局部变量
+  正在生成代码
+  Previous IPDB not found, fall back to full compilation.
+  All 755 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  Factorizer.vcxproj -> D:\编程\C++\Factorizer\Factorizer\x64\Release\Factorizer.exe

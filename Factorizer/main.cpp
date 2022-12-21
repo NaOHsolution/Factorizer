@@ -2,14 +2,50 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
 
+#define DIRECT_SOURCE false
+#define EXTERNAL_SOURCE true
+#define PRIME_FACTORS false
+#define ALL_FACTORS true
+
 typedef unsigned long long ull;
 
 ull primes[100] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+
+struct input {
+	bool source;
+	ull number;
+	string inputDirectory;
+	bool type;
+	bool output;
+	string outputDirectory;
+
+	input() : source(DIRECT_SOURCE), type(PRIME_FACTORS), output(false), number(2ull) {};
+};
+
+class emptyInput {};
+class syntaxError : public exception {
+	virtual const char* what() const throw() {
+		return "Syntax error. Please check your input.";
+	}
+};
+class numberError : public exception {
+	virtual const char* what() const throw() {
+		return "Number error. Please enter an positive whole number\nbetween 1 and 18,446,744,073,709,551,616.";
+	}
+};
+class exitProgram {};
+class help {};
+class fileError : public exception {
+	virtual const char* what() const throw() {
+		return "File error. ";
+	}
+};
 
 vector<pair<ull, short>> factorize(ull t) {
 	vector<pair<ull, short>> res;
@@ -60,83 +96,247 @@ vector<ull> factors(ull t) {
 	return res;
 }
 
-int main() {
-	ull number;
-	char op;
-	string buf;
-	stringstream m;
-	bool flag = false;
+void display() {
+	cout << "Factorizer 1.4.0" << endl << "By NaOHsolution" << endl << endl << "Syntax:" << endl << "-d/-e source -p/-f [output]" << endl << endl;
+	cout << "Options:" << endl;
+	cout << "-d/-e \t Where the number(s) comes from. -d stands\n\t for direct input, -e stands for external\n\t source (file)." << endl;
+	cout << "source \t What the number(s) is. If the previous\n\t parameter is -d, just enter the number; if\n\t it is -e, enter the directory of the input file." << endl;
+	cout << "-p/-f \t What to do with the number(s). -p stands\n\t for factorizing (prime factors), -f stands\n\t for factor finding (all factors)." << endl;
+	cout << "[output] Where to put the results. Leave blank to\n\t show them in the console, or enter a output\n\t directory." << endl << endl;
+	cout << "Enter \"exit\" to quit the program, or \"help\" to\ndisplay this screen." << endl << endl;
+	cout << "\"-d 12345 -p C:\\log.txt \" means factorizing the number\n12345 into its prime factors before putting the results\ninto a file with directory \"C:\\log.txt\"." << endl << endl;
+}
 
-	cout << "Factorizer 1.3.2" << endl << "Creator: NaOHsolution" << endl << endl;
+input handleInput(string t) {
+	if (t.empty()) throw emptyInput();
+	while (t[0] == ' ' && !t.empty()) t.erase(0, 1);
+	while (t[t.size() - 1] == ' ' && !t.empty()) t.erase(t.size() - 1, 1);
+	if (t.empty()) throw emptyInput();
+	if (t == "exit") throw exitProgram();
+	if (t == "help") throw help();
+	if (t.length() < 6) throw syntaxError();
+
+	t += " ";
+
+	input ret;
+	bool hasType = false;
+	int index1, index2;
+	string buf;
+	stringstream s;
+	fstream fs;
+	ull temp;
+
+	if (t[0] != '-') throw syntaxError();
+	switch (t[1]) {
+	case 'd':
+		ret.source = DIRECT_SOURCE;
+		break;
+	case 'e':
+		ret.source = EXTERNAL_SOURCE;
+		break;
+	default:
+		throw syntaxError();
+	}
+	for (int i = 2; i < t.size() - 2; ++i) {
+		if (t[i] == '-' && t[i + 2] == ' ' && t[i - 1] == ' ') {
+			switch (t[i + 1]) {
+			case 'p':
+				ret.type = PRIME_FACTORS;
+				hasType = true;
+				index1 = i - 1, index2 = i + 2;
+				break;
+			case 'f':
+				ret.type = ALL_FACTORS;
+				hasType = true;
+				index1 = i - 1, index2 = i + 2;
+				break;
+			default:
+				continue;
+			}
+		}
+	}
+	if (!hasType) throw syntaxError();
+	buf = t.substr(2, index1 - 2);
+	while (buf[0] == ' ' && buf.size() > 1) buf.erase(0, 1);
+	while (buf[buf.size() - 1] == ' ' && buf.size() > 1) buf.erase(buf.size() - 1, 1);
+	if (buf == " ") throw syntaxError();
+	
+	if (ret.source == DIRECT_SOURCE) {
+		if (buf == "0") throw numberError();
+		for (int i = 0; i < buf.size(); ++i) {
+			if (buf[i] < '0' || buf[i] > '9') throw syntaxError();
+		}
+		s << buf;
+		s >> ret.number;
+		if (s.fail()) throw numberError();
+	}
+	else ret.inputDirectory = buf;
+	buf = t.substr(index2, t.size() - index2);
+	while (buf[0] == ' ' && buf.size() > 1) buf.erase(0, 1);
+	while (buf[buf.size() - 1] == ' ' && buf.size() > 1) buf.erase(buf.size() - 1, 1);
+	if (buf == " " || buf.empty()) ret.output = false;
+	else ret.output = true, ret.outputDirectory = buf;
+
+	if (ret.source == EXTERNAL_SOURCE) {
+		fs.open(ret.inputDirectory, ios::in);
+		if (!fs.is_open()) throw fileError();
+		fs.close();
+	}
+	if (ret.output) {
+		fs.open(ret.outputDirectory, ios::out);
+		if (!fs.is_open()) throw fileError();
+		fs.close();
+	}
+
+	return ret;
+}
+
+int main() {
+	string buf;
+	input op;
+	int progress;
+	vector<pair<ull, short>> resultp;
+	vector<ull> resultf;
+	vector<ull> numbers;
+	fstream fs;
+
+	display();
 	
 	while (true) {
-		m.clear();
-		m.str("");
-		cout << "Enter the number (0 to exit):" << endl << "> ";
+		cout << "> ";
 		getline(cin, buf, '\n');
-		for (int i = 0; i < buf.size(); ++i) {
-			if (buf[i] < '0' || buf[i] > '9') {
-				cout << endl << "Invalid input." << endl << endl;
-				flag = true;
-				break;
-			}
+
+		try {
+			op = handleInput(buf);
 		}
-		if (flag) {
-			flag = false;
+		catch (emptyInput) {
 			continue;
 		}
-		m << buf;
-		m >> number;
-		if (m.fail()) {
-			cout << endl << "The number is too big to handle. Please enter a number less than 18,446,744,073,709,551,616" << endl << endl;
-			continue;
+		catch (exitProgram) {
+			return 0;
 		}
-		if (number == 0) break;
-		m.clear();
-		m.str("");
-		cout << endl << "Select an operation: " << endl << "[p] Factorize the number into its prime factors" << endl << "[f] Find out all of the number's factors" << endl << "> ";
-		getline(cin, buf, '\n');
-		if (buf != "p" && buf != "f") {
-			cout << endl << "Invalid input." << endl << endl;
-			continue;
-		}
-
-		op = buf[0];
-		switch (op) {
-		case 'p':
-			if (number != 1) {
-				vector<pair<ull, short>> result = factorize(number);
-
-				cout << endl << number << " = ";
-				for (vector<pair<ull, short>>::iterator itr = result.begin(); itr != result.end(); ++itr) {
-					if (itr->second == 1) cout << itr->first;
-					else cout << itr->first << " ^ " << itr->second;
-					if (itr + 1 != result.end()) cout << " x ";
-				}
-				cout << endl;
-				if (result.size() == 1 && result.begin()->second == 1) cout << number << " is prime.";
-				else cout << number << " is composite.";
-			}
-			else cout << endl << "1 is neither prime nor composite.";
-
-			break;
-		case 'f':
-			vector<ull> result = factors(number);
-
-			cout << endl << "Factors: ";
-			for (vector<ull>::iterator itr = result.begin(); itr != result.end(); ++itr) {
-				cout << *itr;
-				if (itr + 1 != result.end()) cout << ", ";
-			}
+		catch (help) {
 			cout << endl;
-			if (result.size() == 1) cout << "1 is neither prime nor composite.";
-			else if (result.size() == 2) cout << number << " is prime.";
-			else cout << number << " is composite.";
-
-			break;
+			display();
+			continue;
 		}
-		
-		cout << endl << endl;
+		catch (exception& e1) {
+			cout << endl << e1.what() << endl << endl;
+			continue;
+		}
+
+		numbers.clear();
+		resultf.clear();
+		resultp.clear();
+		cout << endl;
+		if (op.source == DIRECT_SOURCE) {
+			numbers.push_back(op.number);
+		}
+		else if (op.source == EXTERNAL_SOURCE) {
+			fs.open(op.inputDirectory, ios::in);
+			while (!fs.eof()) {
+				ull t = 0;
+				string buf;
+				fs >> t;
+				if (fs.fail()) {
+					fs.clear();
+					fs >> buf;
+				}
+				else if (t != 0) numbers.push_back(t);
+			}
+			if (numbers.empty()) {
+				cout << "There are no numbers in the file." << endl << endl;
+				continue;
+			}
+			fs.close();
+			cout << "Read successfully from " << op.inputDirectory << endl << endl;
+		}
+
+		progress = 1;
+		if (op.type == PRIME_FACTORS) {
+			if (op.output == false) {
+				for (vector<ull>::iterator itr = numbers.begin(); itr != numbers.end(); ++itr, ++progress) {
+					if (*itr != 1) {
+						resultp = factorize(*itr);
+
+						cout << *itr << " = ";
+						for (vector<pair<ull, short>>::iterator itr2 = resultp.begin(); itr2 != resultp.end(); ++itr2) {
+							cout << itr2->first;
+							if (itr2->second != 1) cout << " ^ " << itr2->second;
+							if (itr2 + 1 != resultp.end()) cout << " x ";
+						}
+						cout << endl;
+						if (resultp.size() == 1 && resultp.begin()->second == 1) cout << *itr << " is prime. (" << progress << "/" << numbers.size() << ")";
+						else cout << *itr << " is composite. (" << progress << "/" << numbers.size() << ")";
+					}
+					else cout << "1 is neither prime nor composite. (" << progress << "/" << numbers.size() << ")";
+					cout << endl << endl;
+				}
+			}
+			else if (op.output == true) {
+				fs.open(op.outputDirectory, ios::out);
+				for (vector<ull>::iterator itr = numbers.begin(); itr != numbers.end(); ++itr, ++progress) {
+					if (*itr != 1) {
+						resultp = factorize(*itr);
+
+						fs << *itr << " = ";
+						for (vector<pair<ull, short>>::iterator itr2 = resultp.begin(); itr2 != resultp.end(); ++itr2) {
+							fs << itr2->first;
+							if (itr2->second != 1) fs << " ^ " << itr2->second;
+							if (itr2 + 1 != resultp.end()) fs << " x ";
+						}
+						fs << endl;
+						if (resultp.size() == 1 && resultp.begin()->second == 1) fs << *itr << " is prime.";
+						else fs << *itr << " is composite.";
+					}
+					else fs << "1 is neither prime nor composite.";
+					fs << endl << endl;
+
+					cout << "Completed operation on " << *itr << " (" << progress << "/" << numbers.size() << ")." << endl;
+				}
+				cout << endl << "File ready at " << op.outputDirectory << "." << endl << endl;
+				fs.close();
+			}
+		}
+		else if (op.type == ALL_FACTORS) {
+			if (op.output == false) {
+				for (vector<ull>::iterator itr = numbers.begin(); itr != numbers.end(); ++itr, ++progress) {
+					resultf = factors(*itr);
+
+					cout << "Factors of " << *itr << ": " << endl;
+					for (vector<ull>::iterator itr2 = resultf.begin(); itr2 != resultf.end(); ++itr2) {
+						cout << *itr2;
+						if (itr2 + 1 != resultf.end()) cout << ", ";
+					}
+					cout << endl;
+					if (*itr == 1) cout << "1 is neither prime nor composite. (" << progress << "/" << numbers.size() << ")";
+					else if (resultf.size() == 2) cout << *itr << " is prime. (" << progress << "/" << numbers.size() << ")";
+					else cout << *itr << " is composite. (" << progress << "/" << numbers.size() << ")";
+					cout << endl << endl;
+				}
+			}
+			else if (op.output == true) {
+				fs.open(op.outputDirectory, ios::out);
+				for (vector<ull>::iterator itr = numbers.begin(); itr != numbers.end(); ++itr, ++progress) {
+					resultf = factors(*itr);
+
+					fs << "Factors of " << *itr << ": " << endl;
+					for (vector<ull>::iterator itr2 = resultf.begin(); itr2 != resultf.end(); ++itr2) {
+						fs << *itr2;
+						if (itr2 + 1 != resultf.end()) fs << ", ";
+					}
+					fs << endl;
+					if (*itr == 1) fs << "1 is neither prime nor composite.";
+					else if (resultf.size() == 2) fs << *itr << " is prime.";
+					else fs << *itr << " is composite.";
+					fs << endl << endl;
+
+					cout << "Completed operation on " << *itr << " (" << progress << "/" << numbers.size() << ")." << endl;
+				}
+				cout << endl << "File ready at " << op.outputDirectory << "." << endl << endl;
+				fs.close();
+			}
+		}
 	}
 	
 	return 0;
