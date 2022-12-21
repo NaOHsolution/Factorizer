@@ -1,4 +1,3 @@
-#include <conio.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -12,6 +11,15 @@ using namespace std;
 #define EXTERNAL_SOURCE true
 #define PRIME_FACTORS false
 #define ALL_FACTORS true
+
+#define DEFAULT_ERROR 0
+#define NO_SOURCE 1
+#define NO_TYPE 2
+#define NO_INPUT 3
+#define OUT_OF_RANGE 4
+#define NOT_A_NUMBER 5
+#define INPUT_ERROR 6
+#define OUTPUT_ERROR 7
 
 typedef unsigned long long ull;
 
@@ -30,21 +38,43 @@ struct input {
 
 class emptyInput {};
 class syntaxError : public exception {
+	int type;
+
 	virtual const char* what() const throw() {
-		return "Syntax error. Please check your input.";
+		if (type == NO_SOURCE) return "Syntax error: Cannot find the -d/-e parameter.";
+		else if (type == NO_TYPE) return "Syntax error: Cannot find the -p/-f parameter.";
+		else if (type == NO_INPUT) return "Syntax error: Cannot find the number or input directory.";
+		else return "Syntax error. Please check your input.";
 	}
+
+public: 
+	syntaxError(int t) : type(t) {};
 };
 class numberError : public exception {
+	int type;
+
 	virtual const char* what() const throw() {
-		return "Number error. Please enter an positive whole number\nbetween 1 and 18,446,744,073,709,551,616.";
+		if (type == NOT_A_NUMBER) return "Number error: The input is not a number.";
+		else if (type == OUT_OF_RANGE) return "Number error: The number is out of range.";
+		else return "Number error. Please check your input.";
 	}
+
+public: 
+	numberError(int t) : type(t) {};
 };
 class exitProgram {};
 class help {};
 class fileError : public exception {
+	int type;
+	
 	virtual const char* what() const throw() {
-		return "File error. ";
+		if (type == INPUT_ERROR) return "File error: Cannot open input directory.";
+		else if (type == OUTPUT_ERROR) return "File error: Cannot open output directory.";
+		else return "File error. Please check your input.";
 	}
+
+public:
+	fileError(int t) : type(t) {};
 };
 
 vector<pair<ull, short>> factorize(ull t) {
@@ -97,14 +127,15 @@ vector<ull> factors(ull t) {
 }
 
 void display() {
-	cout << "Factorizer 1.4.0" << endl << "By NaOHsolution" << endl << endl << "Syntax:" << endl << "-d/-e source -p/-f [output]" << endl << endl;
-	cout << "Options:" << endl;
+	cout << "Factorizer 1.4.1" << endl << "By NaOHsolution" << endl << endl << "Syntax:" << endl << "-d/-e source -p/-f [output]" << endl << endl;
+	cout << "Parameters: " << endl;
 	cout << "-d/-e \t Where the number(s) comes from. -d stands\n\t for direct input, -e stands for external\n\t source (file)." << endl;
 	cout << "source \t What the number(s) is. If the previous\n\t parameter is -d, just enter the number; if\n\t it is -e, enter the directory of the input file." << endl;
 	cout << "-p/-f \t What to do with the number(s). -p stands\n\t for factorizing (prime factors), -f stands\n\t for factor finding (all factors)." << endl;
 	cout << "[output] Where to put the results. Leave blank to\n\t show them in the console, or enter a output\n\t directory." << endl << endl;
 	cout << "Enter \"exit\" to quit the program, or \"help\" to\ndisplay this screen." << endl << endl;
 	cout << "\"-d 12345 -p C:\\log.txt \" means factorizing the number\n12345 into its prime factors before putting the results\ninto a file with directory \"C:\\log.txt\"." << endl << endl;
+	cout << "Please make sure the number(s) is between 1 and\n18,446,744,073,709,551,615. " << endl << endl;
 }
 
 input handleInput(string t) {
@@ -114,7 +145,7 @@ input handleInput(string t) {
 	if (t.empty()) throw emptyInput();
 	if (t == "exit") throw exitProgram();
 	if (t == "help") throw help();
-	if (t.length() < 6) throw syntaxError();
+	if (t.length() < 6) throw syntaxError(DEFAULT_ERROR);
 
 	t += " ";
 
@@ -126,7 +157,7 @@ input handleInput(string t) {
 	fstream fs;
 	ull temp;
 
-	if (t[0] != '-') throw syntaxError();
+	if (t[0] != '-') throw syntaxError(NO_SOURCE);
 	switch (t[1]) {
 	case 'd':
 		ret.source = DIRECT_SOURCE;
@@ -135,7 +166,7 @@ input handleInput(string t) {
 		ret.source = EXTERNAL_SOURCE;
 		break;
 	default:
-		throw syntaxError();
+		throw syntaxError(NO_SOURCE);
 	}
 	for (int i = 2; i < t.size() - 2; ++i) {
 		if (t[i] == '-' && t[i + 2] == ' ' && t[i - 1] == ' ') {
@@ -155,20 +186,21 @@ input handleInput(string t) {
 			}
 		}
 	}
-	if (!hasType) throw syntaxError();
+	if (!hasType) throw syntaxError(NO_TYPE);
+	if (2 >= index1 - 2) throw syntaxError(NO_INPUT);
 	buf = t.substr(2, index1 - 2);
 	while (buf[0] == ' ' && buf.size() > 1) buf.erase(0, 1);
 	while (buf[buf.size() - 1] == ' ' && buf.size() > 1) buf.erase(buf.size() - 1, 1);
-	if (buf == " ") throw syntaxError();
+	if (buf == " ") throw syntaxError(NO_INPUT);
 	
 	if (ret.source == DIRECT_SOURCE) {
-		if (buf == "0") throw numberError();
+		if (buf == "0") throw numberError(OUT_OF_RANGE);
 		for (int i = 0; i < buf.size(); ++i) {
-			if (buf[i] < '0' || buf[i] > '9') throw syntaxError();
+			if (buf[i] < '0' || buf[i] > '9') throw numberError(NOT_A_NUMBER);
 		}
 		s << buf;
 		s >> ret.number;
-		if (s.fail()) throw numberError();
+		if (s.fail()) throw numberError(OUT_OF_RANGE);
 	}
 	else ret.inputDirectory = buf;
 	buf = t.substr(index2, t.size() - index2);
@@ -179,12 +211,12 @@ input handleInput(string t) {
 
 	if (ret.source == EXTERNAL_SOURCE) {
 		fs.open(ret.inputDirectory, ios::in);
-		if (!fs.is_open()) throw fileError();
+		if (!fs.is_open()) throw fileError(INPUT_ERROR);
 		fs.close();
 	}
 	if (ret.output) {
 		fs.open(ret.outputDirectory, ios::out);
-		if (!fs.is_open()) throw fileError();
+		if (!fs.is_open()) throw fileError(INPUT_ERROR);
 		fs.close();
 	}
 
