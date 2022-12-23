@@ -19,7 +19,7 @@ struct threadInfo {
 	HWND main;
 
 	CProgressCtrl* progress;
-	CListCtrl* list;
+	CMyListCtrl* list;
 	CButton* button1;
 	CButton* button2;
 	CStatusBar* status;
@@ -74,7 +74,7 @@ public:
 	CStatusBar m_status;
 	afx_msg void OnBnClickedButton1();
 	CProgressCtrl m_progress1;
-	CListCtrl m_list1;
+	CMyListCtrl m_list1;
 	afx_msg void OnAboutAbout();
 	CButton m_radio1;
 	CButton m_radio2;

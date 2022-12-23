@@ -103,3 +103,70 @@ BOOL CFactorizerApp::InitInstance()
 	//  而不是启动应用程序的消息泵。
 	return FALSE;
 }
+
+void CMyListCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) {
+	CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
+	CRect rcItem(lpDrawItemStruct->rcItem), rcItem2;
+	int nItem = lpDrawItemStruct->itemID;
+	int offset = 5;
+	COLORREF clrTextSave, clrBkSave;
+	static _TCHAR szBuff[2048];//这里是你要显示的字符串长度，想多长有多长
+	LV_ITEM lvi;
+	lvi.mask = LVIF_TEXT | LVIF_STATE;//LVIF_IMAGE   |
+	lvi.iItem = nItem;
+	lvi.iSubItem = 0;
+	lvi.pszText = szBuff;
+	lvi.cchTextMax = sizeof(szBuff);
+	lvi.stateMask = 0xFFFF;
+	GetItem(&lvi);
+
+	BOOL bSelected = (lvi.state & LVIS_SELECTED);
+	CRect rcAllLabels;
+	GetItemRect(nItem, rcAllLabels, LVIR_BOUNDS);
+	if (bSelected) {
+		clrTextSave = pDC->SetTextColor(::GetSysColor(COLOR_HIGHLIGHTTEXT));
+		clrBkSave = pDC->SetBkColor(::GetSysColor(COLOR_HIGHLIGHT));
+		pDC->FillRect(rcAllLabels, &CBrush(::GetSysColor(COLOR_HIGHLIGHT)));
+	}
+	else {
+		clrTextSave = pDC->SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
+		clrBkSave = pDC->SetBkColor(::GetSysColor(COLOR_WINDOW));
+		pDC->FillRect(rcAllLabels, &CBrush(::GetSysColor(COLOR_WINDOW)));
+	}
+	GetItemRect(nItem, rcItem, LVIR_LABEL);
+	rcItem2 = rcItem;
+	rcItem2.left += offset;
+	rcItem2.right += offset;
+	pDC->DrawText(szBuff, -1, rcItem2, DT_LEFT | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP | DT_VCENTER | DT_END_ELLIPSIS);
+
+	LV_COLUMN lvc;
+	lvc.mask = LVCF_FMT | LVCF_WIDTH;
+	for (int nColumn = 1; GetColumn(nColumn, &lvc); nColumn++) {
+		rcItem.left = rcItem.right;
+		rcItem.right += lvc.cx;
+		rcItem2 = rcItem;
+		rcItem2.left += offset;
+		rcItem2.right += offset;
+
+		int nRetLen = GetItemText(nItem, nColumn, szBuff, sizeof(szBuff));
+		if (nRetLen == 0)
+			continue;
+		UINT nJustify = DT_LEFT;
+		switch (lvc.fmt & LVCFMT_JUSTIFYMASK) {
+		case   LVCFMT_RIGHT:
+			nJustify = DT_RIGHT;
+			break;
+		case   LVCFMT_CENTER:
+			nJustify = DT_CENTER;
+			break;
+		default:
+			break;
+		}
+		pDC->DrawText(szBuff, -1, rcItem2, nJustify | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP | DT_VCENTER | DT_END_ELLIPSIS);// DT_END_ELLIPSIS可以实现文字显示不开后的...效果
+	}
+	if (lvi.state & LVIS_FOCUSED) pDC->DrawFocusRect(rcAllLabels);
+	if (bSelected) {
+		pDC->SetTextColor(clrTextSave);
+		pDC->SetBkColor(clrBkSave);
+	}
+}

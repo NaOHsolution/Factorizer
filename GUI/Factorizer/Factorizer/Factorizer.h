@@ -31,3 +31,8 @@ public:
 };
 
 extern CFactorizerApp theApp;
+
+class CMyListCtrl : public CListCtrl {
+public:
+	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+};
