@@ -1,0 +1,18 @@
+﻿  Factorizer.cpp
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\resource.h(38,1): warning C4005: “IDCANCEL”: 宏重定义
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.h(11109): message : 参见“IDCANCEL”的前一个定义
+  FactorizerDlg.cpp
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\resource.h(38,1): warning C4005: “IDCANCEL”: 宏重定义
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.h(11109): message : 参见“IDCANCEL”的前一个定义
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\FactorizerDlg.cpp(289,21): warning C4018: “<”: 有符号/无符号不匹配
+  SettingsDlg.cpp
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\resource.h(38,1): warning C4005: “IDCANCEL”: 宏重定义
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.h(11109): message : 参见“IDCANCEL”的前一个定义
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.rh(1438): warning RC4005: 'IDCANCEL' : redefinition
+  
+  正在生成代码
+  15 of 660 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
+    11 functions were new in current compilation
+    16 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  Factorizer.vcxproj -> D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Release\Factorizer.exe
