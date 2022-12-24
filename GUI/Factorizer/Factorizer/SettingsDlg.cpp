@@ -71,6 +71,8 @@ BOOL SettingsDlg::OnInitDialog()
 		SetDlgItemText(IDC_COMBO_1, L"English");
 		break;
 	case simplifiedChinese:
+		std::locale simplifiedChinese("zh_CN.UTF-8");
+		fs.imbue(simplifiedChinese);
 		fs.open(L"lang\\simpchinese_settings.lang", std::ios::in);
 		SetDlgItemText(IDC_COMBO_1, L"简体中文");
 		break;

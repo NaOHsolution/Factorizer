@@ -209,6 +209,8 @@ BOOL CFactorizerDlg::OnInitDialog()
 		fs.open(L"lang\\english_factorizer.lang", std::ios::in);
 		break;
 	case simplifiedChinese:
+		std::locale simplifiedChinese("zh_CN.UTF-8");
+		fs.imbue(simplifiedChinese);
 		fs.open(L"lang\\simpchinese_factorizer.lang", std::ios::in);
 		break;
 	}
@@ -233,7 +235,7 @@ BOOL CFactorizerDlg::OnInitDialog()
 	m_list1.SetExtendedStyle(LVS_EX_GRIDLINES);
 	m_list1.InsertColumn(0, L"ID", LVS_ALIGNLEFT, 30);
 	m_list1.InsertColumn(1, caption[listColumnNumber], LVS_ALIGNLEFT, 150);
-	m_list1.InsertColumn(2, caption[listColumnResult], LVS_ALIGNLEFT, 80);
+	m_list1.InsertColumn(2, caption[listColumnResult], LVS_ALIGNLEFT, 100);
 	m_list1.InsertColumn(3, caption[listColumnDetail], LVS_ALIGNLEFT, 2500);
 	SetDlgItemText(IDC_STATIC_1, caption[inputGroup]);
 	SetDlgItemText(IDC_STATIC_2, caption[groupType]);
@@ -616,6 +618,8 @@ BOOL CAboutDlg::OnInitDialog()
 		fs.open(L"lang\\english_about.lang", std::ios::in);
 		break;
 	case simplifiedChinese:
+		std::locale simplifiedChinese("zh_CN.UTF-8");
+		fs.imbue(simplifiedChinese);
 		fs.open(L"lang\\simpchinese_about.lang", std::ios::in);
 		break;
 	}

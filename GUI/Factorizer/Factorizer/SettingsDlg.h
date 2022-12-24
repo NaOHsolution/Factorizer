@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <string>
+#include <locale>
 
 // SettingsDlg 对话框
 
@@ -23,6 +24,13 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+	BOOL PreTranslateMessage(MSG* pMsg)
+	{
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE) return TRUE;
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) return TRUE;
+		else
+			return CDialog::PreTranslateMessage(pMsg);
+	}
 public:
 	bool minimize;
 	bool alert;
