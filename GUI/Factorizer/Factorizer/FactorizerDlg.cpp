@@ -196,22 +196,28 @@ BOOL CFactorizerDlg::OnInitDialog()
 	std::wstring buf1;
 	CMenu* menu;
 	CMenu* subMenu;
+	TCHAR buf2[MAX_PATH + 1];
+	CString path;
 
-	fs.open(L"config.dll", std::ios::in);
+	GetModuleFileName(NULL, buf2, MAX_PATH);
+	(_tcsrchr(buf2, _T('\\')))[1] = 0;
+	path = buf2;
+	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
 	fs >> minimizeWhenComputing >> alertWhenDone >> lang;
 	fs.close();
+
 	switch (lang) {
 	case english:
-		fs.open(L"lang\\english_factorizer.lang", std::ios::in);
+		fs.open(path + L"lang\\english_factorizer.lang", std::ios::in);
 		break;
 	case simplifiedChinese:
 		std::locale simplifiedChinese("zh_CN.UTF-8");
 		fs.imbue(simplifiedChinese);
-		fs.open(L"lang\\simpchinese_factorizer.lang", std::ios::in);
+		fs.open(path + L"lang\\simpchinese_factorizer.lang", std::ios::in);
 		break;
 	}
 	if (!fs.is_open()) {
@@ -574,11 +580,6 @@ void CFactorizerDlg::OnOptionsOptions()
 	// TODO: 在此添加命令处理程序代码
 	SettingsDlg dlg;
 	dlg.DoModal();
-
-	std::wfstream fs;
-	fs.open(L"config.dll", std::ios::in);
-	fs >> minimizeWhenComputing >> alertWhenDone >> lang;
-	fs.close();
 }
 
 
@@ -593,7 +594,13 @@ void CFactorizerDlg::OnOptionsAbout()
 void CFactorizerDlg::OnToolsOpenincommandprompt()
 {
 	// TODO: 在此添加命令处理程序代码
-	system(".\\cmdFactorizer.exe");
+	TCHAR buf2[MAX_PATH + 1];
+	CString path;
+
+	GetModuleFileName(NULL, buf2, MAX_PATH);
+	(_tcsrchr(buf2, _T('\\')))[1] = 0;
+	path = buf2;
+	system(path + ".\\cmdFactorizer.exe");
 }
 
 
@@ -606,7 +613,13 @@ BOOL CAboutDlg::OnInitDialog()
 	std::wstring buf1;
 	bool buf2, buf3;
 	int lang;
-	fs.open(L"config.dll", std::ios::in);
+	TCHAR buf4[MAX_PATH + 1];
+	CString path;
+
+	GetModuleFileName(NULL, buf4, MAX_PATH);
+	(_tcsrchr(buf4, _T('\\')))[1] = 0;
+	path = buf4;
+	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
@@ -615,12 +628,12 @@ BOOL CAboutDlg::OnInitDialog()
 	fs.close();
 	switch (lang) {
 	case english:
-		fs.open(L"lang\\english_about.lang", std::ios::in);
+		fs.open(path + L"lang\\english_about.lang", std::ios::in);
 		break;
 	case simplifiedChinese:
 		std::locale simplifiedChinese("zh_CN.UTF-8");
 		fs.imbue(simplifiedChinese);
-		fs.open(L"lang\\simpchinese_about.lang", std::ios::in);
+		fs.open(path + L"lang\\simpchinese_about.lang", std::ios::in);
 		break;
 	}
 	if (!fs.is_open()) {

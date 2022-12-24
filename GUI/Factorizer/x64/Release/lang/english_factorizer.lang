@@ -1,0 +1,40 @@
+Factorizer
+Input
+Direct input
+From external file
+Computation
+Prime factors
+All factors
+Start
+Results
+Number
+Result
+Details
+Prime
+Composite
+Output to file
+Output
+Status
+Ready.
+Computing...
+Reading from file...
+Writing to file...
+Warning
+Number error
+File error
+Please enter a number.
+Please enter a positive whole number.
+Please enter a number smaller than 18,446,744,073,709,551,616.
+Please enter a number.
+The external file contains no numbers within range.
+Cannot open external file.
+Cannot open output file.
+Computation completed.
+Output completed.
+There are no results to output.
+Tools
+Open in command line
+Calculator
+Options
+Settings
+About
