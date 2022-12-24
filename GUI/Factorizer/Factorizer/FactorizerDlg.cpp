@@ -15,16 +15,20 @@
 
 threadInfo Info;
 
-enum index {
+enum indexFactorizer {
 	factorizerTitle, inputGroup, radioDirect, radioExternal, groupType, radioPrime, radioAll, buttonStart, groupResult, 
 	listColumnNumber, listColumnResult, listColumnDetail, listPrime, listComposite, textOutput, buttonOutput, statusStatus, 
 	statusReady, statusComputation, statusReading, statusWriting, boxWarning, boxNumberError, boxFileError, boxNotANumber, 
 	boxZero, boxOutOfRange, boxInputEmpty, boxInputFileEmpty, boxInputFileNotFound, boxOutputFileNotFound, boxComplete,
-	boxOutputComplete, boxOutputEmpty,
+	boxOutputComplete, boxOutputEmpty, menuTools, menuCommandLine, menuCalculator, menuOptions, menuOptions2, menuAbout 
+};
+enum indexAbout {
+	aboutTitle, line1, line2, buttonOK
 };
 
 ull primes[100] = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 };
-CString caption[40];
+CString caption[60];
+CString captionAbout[10];
 
 std::vector<std::pair<ull, short>> factorize(ull t) {
 	std::vector<std::pair<ull, short>> res;
@@ -96,6 +100,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedOk();
+	virtual BOOL OnInitDialog();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -189,6 +194,8 @@ BOOL CFactorizerDlg::OnInitDialog()
 	CRect rect = { 0 };
 	std::wfstream fs;
 	std::wstring buf1;
+	CMenu* menu;
+	CMenu* subMenu;
 	fs.open(L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
@@ -201,7 +208,7 @@ BOOL CFactorizerDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 34; ++i) {
+	for (int i = 0; i < 40; ++i) {
 		if (fs.eof()) {
 			MessageBox(L"Language file corrupted.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 			abort();
@@ -230,6 +237,16 @@ BOOL CFactorizerDlg::OnInitDialog()
 	SetDlgItemText(IDC_BUTTON_1, caption[buttonStart]);
 	SetDlgItemText(IDC_BUTTON_2, caption[buttonOutput]);
 	SetWindowText(caption[factorizerTitle]);
+
+	menu = AfxGetApp()->m_pMainWnd->GetMenu();
+	menu->ModifyMenu(0, MF_BYPOSITION, ID_FILE_SAVE, caption[menuTools]);
+	menu->ModifyMenu(1, MF_BYPOSITION, ID_FILE_SAVE, caption[menuOptions]);
+	subMenu = menu->GetSubMenu(0);
+	subMenu->ModifyMenu(0, MF_BYPOSITION, ID_TOOLS_OPENINCOMMANDPROMPT, caption[menuCommandLine]);
+	subMenu->ModifyMenu(1, MF_BYPOSITION, ID_TOOLS_CALCULATOR, caption[menuCalculator]);
+	subMenu = menu->GetSubMenu(1);
+	subMenu->ModifyMenu(0, MF_BYPOSITION, ID_OPTIONS_OPTIONS, caption[menuOptions2]);
+	subMenu->ModifyMenu(2, MF_BYPOSITION, ID_OPTIONS_ABOUT, caption[menuAbout]);
 
 	m_status.Create(this);
 	m_status.SetIndicators(nID, 2);
@@ -415,9 +432,9 @@ UINT threadFunc(LPVOID lpParam) {
 				if (itr->second != 1) wss << "^" << itr->second;
 				if (itr + 1 != resultp.end()) wss << " x ";
 			}
-			_i64tow_s(id, buf1, 50, 10);
+			_ui64tow_s(id, buf1, 50, 10);
 			pInfo->list->InsertItem(id, buf1);
-			_i64tow_s(*itr0, buf1, 50, 10);
+			_ui64tow_s(*itr0, buf1, 50, 10);
 			pInfo->list->SetItemText(id - 1, 1, buf1);
 			if (*itr0 == 1) pInfo->list->SetItemText(id - 1, 2, L"-");
 			else if (resultp.size() == 1 && resultp.begin()->second == 1) pInfo->list->SetItemText(id - 1, 2, caption[listPrime]);
@@ -439,9 +456,9 @@ UINT threadFunc(LPVOID lpParam) {
 				wss << *itr;
 				if (itr + 1 != resultf.end()) wss << ", ";
 			}
-			_i64tow_s(id, buf1, 50, 10);
+			_ui64tow_s(id, buf1, 50, 10);
 			pInfo->list->InsertItem(id - 1, buf1);
-			_i64tow_s(*itr0, buf1, 50, 10);
+			_ui64tow_s(*itr0, buf1, 50, 10);
 			pInfo->list->SetItemText(id - 1, 1, buf1);
 			if (*itr0 == 1) pInfo->list->SetItemText(id - 1, 2, L"-");
 			else if (resultf.size() == 2) pInfo->list->SetItemText(id - 1, 2, caption[listPrime]);
@@ -566,4 +583,35 @@ void CFactorizerDlg::OnToolsOpenincommandprompt()
 {
 	// TODO: 在此添加命令处理程序代码
 	system(".\\cmdFactorizer.exe");
+}
+
+
+BOOL CAboutDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+	std::wfstream fs;
+	std::wstring buf1;
+	fs.open(L"lang\\english_about.lang", std::ios::in);
+	if (!fs.is_open()) {
+		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		abort();
+	}
+	for (int i = 0; i < 4; ++i) {
+		if (fs.eof()) {
+			MessageBox(L"Language file corrupted.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+			abort();
+		}
+		std::getline(fs, buf1);
+		captionAbout[i] = buf1.c_str();
+	}
+	fs.close();
+	SetWindowText(captionAbout[aboutTitle]);
+	SetDlgItemText(IDC_STATIC_4, captionAbout[line1]);
+	SetDlgItemText(IDC_STATIC_5, captionAbout[line2]);
+	SetDlgItemText(IDOK, captionAbout[buttonOK]);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 异常: OCX 属性页应返回 FALSE
 }

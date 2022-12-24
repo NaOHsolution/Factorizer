@@ -2,6 +2,7 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 Factorizer.rc 使用
 //
+#define CANCEL                          2
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
@@ -35,9 +36,11 @@
 #define IDC_STATIC_12                   1029
 #define IDC_STATIC_2                    1030
 #define IDC_STATIC_3                    1031
-#define IDCANCEL                        1034
+#define IDC_CANCEL                      1034
 #define IDC_CHECK_1                     1036
 #define IDC_CHECK_2                     1037
+#define IDC_STATIC_4                    1038
+#define IDC_STATIC_5                    1039
 #define ID_TOOLS                        32771
 #define ID_32772                        32772
 #define ID_OPTIONS_OPTIONS              32773
@@ -53,7 +56,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        140
 #define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_CONTROL_VALUE         1041
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
