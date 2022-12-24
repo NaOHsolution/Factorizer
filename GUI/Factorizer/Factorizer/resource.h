@@ -10,6 +10,7 @@
 #define IDR_MAINFRAME                   128
 #define IDR_MENU1                       130
 #define IDD_DIALOG_SETTINGS             138
+#define IDD_DIALOG_GCDLCM               142
 #define IDC_PROGRESS1                   1004
 #define IDC_PROGRESS_1                  1004
 #define IDC_LIST1                       1006
@@ -43,6 +44,9 @@
 #define IDC_STATIC_5                    1039
 #define IDC_COMBO_1                     1041
 #define IDC_STATIC_6                    1042
+#define IDC_EDIT1                       1045
+#define IDC_EDIT4                       1048
+#define IDC_EDIT5                       1049
 #define ID_TOOLS                        32771
 #define ID_32772                        32772
 #define ID_OPTIONS_OPTIONS              32773
@@ -51,14 +55,20 @@
 #define ID_TOOLS_OPENINCOMMANDPROMPT    32776
 #define ID_TOOLS_CALCULATOR             32777
 #define ID_OPTIONS_ABOUT                32778
+#define ID_TOOLS_GCDLC                  32779
+#define ID_TOOLS_NARCISSISTICNUMBERS    32780
+#define ID_TOOLS_PERFECTNUMBERS         32781
+#define ID_TOOLS_BASECONVERSION         32782
+#define ID_TOOLS_PERFECTNUMBERS32783    32783
+#define ID_TOOLS_NARCISSISTICNUMBERS32784 32784
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        140
-#define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1044
+#define _APS_NEXT_RESOURCE_VALUE        144
+#define _APS_NEXT_COMMAND_VALUE         32785
+#define _APS_NEXT_CONTROL_VALUE         1050
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

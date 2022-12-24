@@ -8,6 +8,7 @@
 #include "FactorizerDlg.h"
 #include "afxdialogex.h"
 #include "SettingsDlg.h"
+#include "GCDLCMDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -20,7 +21,8 @@ enum indexFactorizer {
 	listColumnNumber, listColumnResult, listColumnDetail, listPrime, listComposite, textOutput, buttonOutput, statusStatus, 
 	statusReady, statusComputation, statusReading, statusWriting, boxWarning, boxNumberError, boxFileError, boxNotANumber, 
 	boxZero, boxOutOfRange, boxInputEmpty, boxInputFileEmpty, boxInputFileNotFound, boxOutputFileNotFound, boxComplete,
-	boxOutputComplete, boxOutputEmpty, menuTools, menuCommandLine, menuCalculator, menuOptions, menuOptions2, menuAbout 
+	boxOutputComplete, boxOutputEmpty, menuTools, menuCommandLine, menuCalculator, menuOptions, menuOptions2, menuAbout,
+	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers
 };
 enum indexAbout {
 	aboutTitle, line1, line2, buttonOK
@@ -155,6 +157,7 @@ BEGIN_MESSAGE_MAP(CFactorizerDlg, CDialogEx)
 	ON_COMMAND(ID_OPTIONS_OPTIONS, &CFactorizerDlg::OnOptionsOptions)
 	ON_COMMAND(ID_OPTIONS_ABOUT, &CFactorizerDlg::OnOptionsAbout)
 	ON_COMMAND(ID_TOOLS_OPENINCOMMANDPROMPT, &CFactorizerDlg::OnToolsOpenincommandprompt)
+	ON_COMMAND(ID_TOOLS_GCDLC, &CFactorizerDlg::OnToolsGcdlc)
 END_MESSAGE_MAP()
 
 
@@ -228,7 +231,7 @@ BOOL CFactorizerDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 40; ++i) {
+	for (int i = 0; i < 44; ++i) {
 		std::getline(fs, buf1, L'\n');
 		caption[i] = buf1.c_str();
 	}
@@ -254,6 +257,8 @@ BOOL CFactorizerDlg::OnInitDialog()
 	SetDlgItemText(IDC_BUTTON_1, caption[buttonStart]);
 	SetDlgItemText(IDC_BUTTON_2, caption[buttonOutput]);
 	SetWindowText(caption[factorizerTitle]);
+	m_edit1.SetLimitText(30);
+	m_edit1.SetWindowText(L"2");
 
 	menu = AfxGetApp()->m_pMainWnd->GetMenu();
 	menu->ModifyMenu(0, MF_BYPOSITION, ID_FILE_SAVE, caption[menuTools]);
@@ -261,6 +266,10 @@ BOOL CFactorizerDlg::OnInitDialog()
 	subMenu = menu->GetSubMenu(0);
 	subMenu->ModifyMenu(0, MF_BYPOSITION, ID_TOOLS_OPENINCOMMANDPROMPT, caption[menuCommandLine]);
 	subMenu->ModifyMenu(1, MF_BYPOSITION, ID_TOOLS_CALCULATOR, caption[menuCalculator]);
+	subMenu->ModifyMenu(3, MF_BYPOSITION, ID_TOOLS_GCDLC, caption[menuGCDLCM]);
+	subMenu->ModifyMenu(4, MF_BYPOSITION, ID_TOOLS_BASECONVERSION, caption[menuBaseConversion]);
+	subMenu->ModifyMenu(5, MF_BYPOSITION, ID_TOOLS_NARCISSISTICNUMBERS32784, caption[menuNarcissisticNumbers]);
+	subMenu->ModifyMenu(6, MF_BYPOSITION, ID_TOOLS_PERFECTNUMBERS32783, caption[menuPerfectNumbers]);
 	subMenu = menu->GetSubMenu(1);
 	subMenu->ModifyMenu(0, MF_BYPOSITION, ID_OPTIONS_OPTIONS, caption[menuOptions2]);
 	subMenu->ModifyMenu(2, MF_BYPOSITION, ID_OPTIONS_ABOUT, caption[menuAbout]);
@@ -652,4 +661,12 @@ BOOL CAboutDlg::OnInitDialog()
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
+}
+
+
+void CFactorizerDlg::OnToolsGcdlc()
+{
+	// TODO: 在此添加命令处理程序代码
+	GCDLCMDlg dlg;
+	dlg.DoModal();
 }

@@ -96,4 +96,5 @@ public:
 	afx_msg void OnOptionsOptions();
 	afx_msg void OnOptionsAbout();
 	afx_msg void OnToolsOpenincommandprompt();
+	afx_msg void OnToolsGcdlc();
 };

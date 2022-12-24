@@ -188,6 +188,7 @@
     <ClInclude Include="Factorizer.h" />
     <ClInclude Include="FactorizerDlg.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GCDLCMDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingsDlg.h" />
@@ -196,6 +197,7 @@
   <ItemGroup>
     <ClCompile Include="Factorizer.cpp" />
     <ClCompile Include="FactorizerDlg.cpp" />
+    <ClCompile Include="GCDLCMDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
