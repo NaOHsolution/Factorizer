@@ -12,6 +12,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <locale>
 
 typedef unsigned long long ull;
 
