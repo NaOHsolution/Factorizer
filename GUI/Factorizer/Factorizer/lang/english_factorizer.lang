@@ -1,7 +1,7 @@
 Factorizer
 Input
 Direct input
-From external file:
+From external file
 Computation
 Prime factors
 All factors
@@ -12,10 +12,10 @@ Result
 Details
 Prime
 Composite
-Output to file:
+Output to file
 Output
 Status
-Ready...
+Ready.
 Computing...
 Reading from file...
 Writing to file...

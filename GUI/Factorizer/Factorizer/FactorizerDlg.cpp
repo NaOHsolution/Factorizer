@@ -196,24 +196,32 @@ BOOL CFactorizerDlg::OnInitDialog()
 	std::wstring buf1;
 	CMenu* menu;
 	CMenu* subMenu;
+
 	fs.open(L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	fs >> minimizeWhenComputing >> alertWhenDone;
+	fs >> minimizeWhenComputing >> alertWhenDone >> lang;
 	fs.close();
-	fs.open(L"lang\\english_factorizer.lang", std::ios::in);
+	switch (lang) {
+	case english:
+		fs.open(L"lang\\english_factorizer.lang", std::ios::in);
+		break;
+	case simplifiedChinese:
+		fs.open(L"lang\\simpchinese_factorizer.lang", std::ios::in);
+		break;
+	}
+	if (!fs.is_open()) {
+		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		abort();
+	}
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
 	for (int i = 0; i < 40; ++i) {
-		if (fs.eof()) {
-			MessageBox(L"Language file corrupted.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
-			abort();
-		}
-		std::getline(fs, buf1);
+		std::getline(fs, buf1, L'\n');
 		caption[i] = buf1.c_str();
 	}
 	fs.close();
@@ -230,6 +238,7 @@ BOOL CFactorizerDlg::OnInitDialog()
 	SetDlgItemText(IDC_STATIC_1, caption[inputGroup]);
 	SetDlgItemText(IDC_STATIC_2, caption[groupType]);
 	SetDlgItemText(IDC_STATIC_3, caption[groupResult]);
+	SetDlgItemText(IDC_STATIC_6, caption[textOutput]);
 	SetDlgItemText(IDC_RADIO_1, caption[radioDirect]);
 	SetDlgItemText(IDC_RADIO_2, caption[radioExternal]);
 	SetDlgItemText(IDC_RADIO_3, caption[radioPrime]);
@@ -566,7 +575,7 @@ void CFactorizerDlg::OnOptionsOptions()
 
 	std::wfstream fs;
 	fs.open(L"config.dll", std::ios::in);
-	fs >> minimizeWhenComputing >> alertWhenDone;
+	fs >> minimizeWhenComputing >> alertWhenDone >> lang;
 	fs.close();
 }
 
@@ -593,17 +602,29 @@ BOOL CAboutDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	std::wfstream fs;
 	std::wstring buf1;
-	fs.open(L"lang\\english_about.lang", std::ios::in);
+	bool buf2, buf3;
+	int lang;
+	fs.open(L"config.dll", std::ios::in);
+	if (!fs.is_open()) {
+		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		abort();
+	}
+	fs >> buf2 >> buf3 >> lang;
+	fs.close();
+	switch (lang) {
+	case english:
+		fs.open(L"lang\\english_about.lang", std::ios::in);
+		break;
+	case simplifiedChinese:
+		fs.open(L"lang\\simpchinese_about.lang", std::ios::in);
+		break;
+	}
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
 	for (int i = 0; i < 4; ++i) {
-		if (fs.eof()) {
-			MessageBox(L"Language file corrupted.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
-			abort();
-		}
-		std::getline(fs, buf1);
+		std::getline(fs, buf1, L'\n');
 		captionAbout[i] = buf1.c_str();
 	}
 	fs.close();

@@ -41,6 +41,8 @@
 #define IDC_CHECK_2                     1037
 #define IDC_STATIC_4                    1038
 #define IDC_STATIC_5                    1039
+#define IDC_COMBO_1                     1041
+#define IDC_STATIC_6                    1042
 #define ID_TOOLS                        32771
 #define ID_32772                        32772
 #define ID_OPTIONS_OPTIONS              32773
@@ -56,7 +58,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        140
 #define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1041
+#define _APS_NEXT_CONTROL_VALUE         1044
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

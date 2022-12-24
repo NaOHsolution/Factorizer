@@ -90,6 +90,7 @@ public:
 
 	bool minimizeWhenComputing;
 	bool alertWhenDone;
+	int lang;
 	afx_msg void OnToolsCalculator();
 	afx_msg void OnOptionsOptions();
 	afx_msg void OnOptionsAbout();

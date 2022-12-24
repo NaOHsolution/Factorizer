@@ -26,8 +26,11 @@ protected:
 public:
 	bool minimize;
 	bool alert;
+	int lang;
 	CButton m_check1;
 	CButton m_check2;
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedOk();
+	CComboBox m_combo1;
+	afx_msg void OnBnClickedCancel();
 };
