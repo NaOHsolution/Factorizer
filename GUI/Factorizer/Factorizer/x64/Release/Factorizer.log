@@ -1,7 +1,10 @@
-﻿C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.rh(1438): warning RC4005: 'IDCANCEL' : redefinition
-  
+﻿  FactorizerDlg.cpp
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\resource.h(38,1): warning C4005: “IDCANCEL”: 宏重定义
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.h(11109): message : 参见“IDCANCEL”的前一个定义
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\FactorizerDlg.cpp(428,60): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\FactorizerDlg.cpp(451,60): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   正在生成代码
-  0 of 708 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 724 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成

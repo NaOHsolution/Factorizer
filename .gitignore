@@ -1,2 +1,8 @@
-
 *.ipch
+*.db
+*.tlog
+*.pdb
+*.suo
+*.aps
+*.iobj
+*.obj

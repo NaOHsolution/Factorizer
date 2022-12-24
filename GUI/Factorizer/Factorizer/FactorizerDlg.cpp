@@ -15,7 +15,16 @@
 
 threadInfo Info;
 
+enum index {
+	factorizerTitle, inputGroup, radioDirect, radioExternal, groupType, radioPrime, radioAll, buttonStart, groupResult, 
+	listColumnNumber, listColumnResult, listColumnDetail, listPrime, listComposite, textOutput, buttonOutput, statusStatus, 
+	statusReady, statusComputation, statusReading, statusWriting, boxWarning, boxNumberError, boxFileError, boxNotANumber, 
+	boxZero, boxOutOfRange, boxInputEmpty, boxInputFileEmpty, boxInputFileNotFound, boxOutputFileNotFound, boxComplete,
+	boxOutputComplete, boxOutputEmpty,
+};
+
 ull primes[100] = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 };
+CString caption[40];
 
 std::vector<std::pair<ull, short>> factorize(ull t) {
 	std::vector<std::pair<ull, short>> res;
@@ -179,12 +188,27 @@ BOOL CFactorizerDlg::OnInitDialog()
 	UINT nID[] = { 1, 2, 3 };
 	CRect rect = { 0 };
 	std::wfstream fs;
+	std::wstring buf1;
 	fs.open(L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
-		MessageBox(L"Configuration file not found.", L"Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
-		return FALSE;
+		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		abort();
 	}
 	fs >> minimizeWhenComputing >> alertWhenDone;
+	fs.close();
+	fs.open(L"lang\\english_factorizer.lang", std::ios::in);
+	if (!fs.is_open()) {
+		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		abort();
+	}
+	for (int i = 0; i < 34; ++i) {
+		if (fs.eof()) {
+			MessageBox(L"Language file corrupted.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+			abort();
+		}
+		std::getline(fs, buf1);
+		caption[i] = buf1.c_str();
+	}
 	fs.close();
 
 	m_progress1.SetRange(0, 99);
@@ -193,20 +217,29 @@ BOOL CFactorizerDlg::OnInitDialog()
 	m_list1.SetView(LVS_REPORT);
 	m_list1.SetExtendedStyle(LVS_EX_GRIDLINES);
 	m_list1.InsertColumn(0, L"ID", LVS_ALIGNLEFT, 30);
-	m_list1.InsertColumn(1, L"Number", LVS_ALIGNLEFT, 150);
-	m_list1.InsertColumn(2, L"Result", LVS_ALIGNLEFT, 80);
-	m_list1.InsertColumn(3, L"Detail", LVS_ALIGNLEFT, 2500);
+	m_list1.InsertColumn(1, caption[listColumnNumber], LVS_ALIGNLEFT, 150);
+	m_list1.InsertColumn(2, caption[listColumnResult], LVS_ALIGNLEFT, 80);
+	m_list1.InsertColumn(3, caption[listColumnDetail], LVS_ALIGNLEFT, 2500);
+	SetDlgItemText(IDC_STATIC_1, caption[inputGroup]);
+	SetDlgItemText(IDC_STATIC_2, caption[groupType]);
+	SetDlgItemText(IDC_STATIC_3, caption[groupResult]);
+	SetDlgItemText(IDC_RADIO_1, caption[radioDirect]);
+	SetDlgItemText(IDC_RADIO_2, caption[radioExternal]);
+	SetDlgItemText(IDC_RADIO_3, caption[radioPrime]);
+	SetDlgItemText(IDC_RADIO_4, caption[radioAll]);
+	SetDlgItemText(IDC_BUTTON_1, caption[buttonStart]);
+	SetDlgItemText(IDC_BUTTON_2, caption[buttonOutput]);
+	SetWindowText(caption[factorizerTitle]);
 
 	m_status.Create(this);
-	m_status.SetIndicators(nID, 3);
+	m_status.SetIndicators(nID, 2);
 	m_status.SetPaneInfo(0, 0, SBPS_NORMAL, 100);
-	m_status.SetPaneInfo(1, 1, SBPS_NORMAL, 100);
-	m_status.SetPaneInfo(2, 2, SBPS_NORMAL, 250);
+	m_status.SetPaneInfo(1, 1, SBPS_NORMAL, 250);
 	GetClientRect(&rect);
 	m_status.MoveWindow(0, rect.bottom - 30, rect.right, 30);
 	
-	m_status.SetPaneText(0, L"Status");
-	m_status.SetPaneText(1, L"Ready.");
+	m_status.SetPaneText(0, caption[statusStatus]);
+	m_status.SetPaneText(1, caption[statusReady]);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -293,7 +326,7 @@ void CFactorizerDlg::OnBnClickedButton1()
 		if (buf3.empty()) {
 			m_button1.EnableWindow(true);
 			m_button2.EnableWindow(true);
-			MessageBox(L"Please enter a number.", L"Number error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
+			MessageBox(caption[boxInputEmpty], caption[boxNumberError], MB_OK | MB_APPLMODAL | MB_ICONERROR);
 			return;
 		}
 		while (!buf3.empty() && buf3.front() == L' ') buf3.erase(0, 1);
@@ -302,7 +335,7 @@ void CFactorizerDlg::OnBnClickedButton1()
 			if (buf3[i] < L'0' || buf3[i] > L'9') {
 				m_button1.EnableWindow(true);
 				m_button2.EnableWindow(true);
-				MessageBox(L"Please enter a number.", L"Number error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
+				MessageBox(caption[boxNotANumber], caption[boxNumberError], MB_OK | MB_APPLMODAL | MB_ICONERROR);
 				return;
 			}
 		}
@@ -311,26 +344,26 @@ void CFactorizerDlg::OnBnClickedButton1()
 		if (t == 0ull) {
 			m_button1.EnableWindow(true);
 			m_button2.EnableWindow(true);
-			MessageBox(L"Please enter a positive whole number.", L"Number error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
+			MessageBox(caption[boxZero], caption[boxNumberError], MB_OK | MB_APPLMODAL | MB_ICONERROR);
 			return;
 		}
 		if (buf1.fail()) {
 			m_button1.EnableWindow(true);
 			m_button2.EnableWindow(true);
-			MessageBox(L"Please enter a number less than 18,446,744,073,709,551,616.", L"Number error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
+			MessageBox(caption[boxOutOfRange], caption[boxNumberError], MB_OK | MB_APPLMODAL | MB_ICONERROR);
 			return;
 		}
 		Info.numbers.push_back(t);
 	}
 	else {
-		m_status.SetPaneText(1, L"Reading file...");
+		m_status.SetPaneText(1, caption[statusReading]);
 		m_browse1.GetWindowText(buf2);
 		fs.open(buf2.GetString(), std::ios::in);
 		if (!fs.is_open()) {
 			m_button1.EnableWindow(true);
 			m_button2.EnableWindow(true);
-			m_status.SetPaneText(1, L"Ready.");
-			MessageBox(L"Cannot open external file.", L"File error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
+			m_status.SetPaneText(1, caption[statusReady]);
+			MessageBox(caption[boxInputFileNotFound], caption[boxFileError], MB_OK | MB_APPLMODAL | MB_ICONERROR);
 			return;
 		}
 		while (!fs.eof()) {
@@ -345,11 +378,11 @@ void CFactorizerDlg::OnBnClickedButton1()
 		if (Info.numbers.empty()) {
 			m_button1.EnableWindow(true);
 			m_button2.EnableWindow(true);
-			m_status.SetPaneText(1, L"Ready.");
-			MessageBox(L"The external file contains no numbers within range.", L"Warning", MB_OK | MB_APPLMODAL | MB_ICONWARNING);
+			m_status.SetPaneText(1, caption[statusReady]);
+			MessageBox(caption[boxInputFileEmpty], caption[boxWarning], MB_OK | MB_APPLMODAL | MB_ICONWARNING);
 			return;
 		}
-		m_status.SetPaneText(1, L"Ready.");
+		m_status.SetPaneText(1, caption[statusReady]);
 	}
 	if (m_radio3.GetCheck() == BST_CHECKED) Info.type = PRIME_FACTORS;
 	else Info.type = ALL_FACTORS;
@@ -368,7 +401,7 @@ UINT threadFunc(LPVOID lpParam) {
 	int id = 1;
 
 	pInfo->progress->SetPos(0);
-	pInfo->status->SetPaneText(1, L"Computing...");
+	pInfo->status->SetPaneText(1, caption[statusComputation]);
 	if (pInfo->minimize) ShowWindow(pInfo->main, SW_MINIMIZE);
 	if (pInfo->type == PRIME_FACTORS) {
 		for (std::vector<ull>::iterator itr0 = pInfo->numbers.begin(); itr0 != pInfo->numbers.end(); ++itr0, ++id) {
@@ -387,8 +420,8 @@ UINT threadFunc(LPVOID lpParam) {
 			_i64tow_s(*itr0, buf1, 50, 10);
 			pInfo->list->SetItemText(id - 1, 1, buf1);
 			if (*itr0 == 1) pInfo->list->SetItemText(id - 1, 2, L"-");
-			else if (resultp.size() == 1 && resultp.begin()->second == 1) pInfo->list->SetItemText(id - 1, 2, L"Prime");
-			else pInfo->list->SetItemText(id - 1, 2, L"Composite");
+			else if (resultp.size() == 1 && resultp.begin()->second == 1) pInfo->list->SetItemText(id - 1, 2, caption[listPrime]);
+			else pInfo->list->SetItemText(id - 1, 2, caption[listComposite]);
 			if (*itr0 == 1) pInfo->list->SetItemText(id - 1, 3, L"-");
 			else pInfo->list->SetItemText(id - 1, 3, wss.str().c_str());
 
@@ -411,8 +444,8 @@ UINT threadFunc(LPVOID lpParam) {
 			_i64tow_s(*itr0, buf1, 50, 10);
 			pInfo->list->SetItemText(id - 1, 1, buf1);
 			if (*itr0 == 1) pInfo->list->SetItemText(id - 1, 2, L"-");
-			else if (resultf.size() == 2) pInfo->list->SetItemText(id - 1, 2, L"Prime");
-			else pInfo->list->SetItemText(id - 1, 2, L"Composite");
+			else if (resultf.size() == 2) pInfo->list->SetItemText(id - 1, 2, caption[listPrime]);
+			else pInfo->list->SetItemText(id - 1, 2, caption[listComposite]);
 			pInfo->list->SetItemText(id - 1, 3, wss.str().c_str());
 
 			pInfo->progress->SetPos(id * 100 / pInfo->numbers.size());
@@ -423,9 +456,9 @@ UINT threadFunc(LPVOID lpParam) {
 	pInfo->progress->SetState(100);
 	pInfo->button1->EnableWindow(true);
 	pInfo->button2->EnableWindow(true);
-	pInfo->status->SetPaneText(1, L"Ready.");
+	pInfo->status->SetPaneText(1, caption[statusReady]);
 
-	if (pInfo->alert) MessageBox(pInfo->main, L"Computation completed.", L"Factorizer", MB_OK | MB_APPLMODAL | MB_ICONINFORMATION);
+	if (pInfo->alert) MessageBox(pInfo->main, caption[boxComplete], caption[factorizerTitle], MB_OK | MB_APPLMODAL | MB_ICONINFORMATION);
 	return 0;
 }
 
@@ -469,22 +502,22 @@ void CFactorizerDlg::OnBnClickedButton2()
 
 	m_button1.EnableWindow(false);
 	m_button2.EnableWindow(false);
-	m_status.SetPaneText(1, L"Writing to file...");
+	m_status.SetPaneText(1, caption[statusWriting]);
 
 	m_browse2.GetWindowText(buf1);
 	fs.open(buf1.GetString(), std::ios::out);
 	if (!fs.is_open()) {
 		m_button1.EnableWindow(true);
 		m_button2.EnableWindow(true);
-		m_status.SetPaneText(1, L"Ready.");
-		MessageBox(L"Cannot open output file.", L"File error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
+		m_status.SetPaneText(1, caption[statusReady]);
+		MessageBox(caption[boxOutputFileNotFound], caption[boxFileError], MB_OK | MB_APPLMODAL | MB_ICONERROR);
 		return;
 	}
 	if (m_list1.GetItemCount() == 0) {
 		m_button1.EnableWindow(true);
 		m_button2.EnableWindow(true);
-		m_status.SetPaneText(1, L"Ready.");
-		MessageBox(L"There are no results to output.", L"Warning", MB_OK | MB_APPLMODAL | MB_ICONWARNING);
+		m_status.SetPaneText(1, caption[statusReady]);
+		MessageBox(caption[boxOutputEmpty], caption[boxWarning], MB_OK | MB_APPLMODAL | MB_ICONWARNING);
 		return;
 	}
 
@@ -496,8 +529,8 @@ void CFactorizerDlg::OnBnClickedButton2()
 	m_button1.EnableWindow(true);
 	m_button2.EnableWindow(true);
 	fs.close();
-	m_status.SetPaneText(1, L"Ready.");
-	MessageBox(L"Output completed.", L"Factorizer", MB_OK | MB_APPLMODAL | MB_ICONINFORMATION);
+	m_status.SetPaneText(1, caption[statusReady]);
+	MessageBox(caption[boxOutputComplete], caption[factorizerTitle], MB_OK | MB_APPLMODAL | MB_ICONINFORMATION);
 }
 
 
@@ -516,10 +549,6 @@ void CFactorizerDlg::OnOptionsOptions()
 
 	std::wfstream fs;
 	fs.open(L"config.dll", std::ios::in);
-	if (!fs.is_open()) {
-		MessageBox(L"Configuration file not found.", L"Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
-		return;
-	}
 	fs >> minimizeWhenComputing >> alertWhenDone;
 	fs.close();
 }
