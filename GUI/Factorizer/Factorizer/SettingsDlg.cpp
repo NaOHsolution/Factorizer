@@ -52,12 +52,8 @@ BOOL SettingsDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	std::wfstream fs;
 	std::wstring buf1;
-	TCHAR buf2[MAX_PATH + 1];
-	CString path;
+	CString path = currentPath();
 
-	GetModuleFileName(NULL, buf2, MAX_PATH);
-	(_tcsrchr(buf2, _T('\\')))[1] = 0;
-	path = buf2;
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Configuration file not found.", L"Fatal Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
@@ -113,8 +109,7 @@ void SettingsDlg::OnBnClickedOk()
 	// TODO: 在此添加控件通知处理程序代码
 	std::wfstream fs;
 	CString buf1;
-	TCHAR buf2[MAX_PATH + 1];
-	CString path;
+	CString path = currentPath();
 
 	if (m_check1.GetCheck() == BST_CHECKED) minimize = true;
 	else minimize = false;
@@ -124,9 +119,6 @@ void SettingsDlg::OnBnClickedOk()
 	if (buf1 == L"English") lang = english;
 	if (buf1 == L"简体中文") lang = simplifiedChinese;
 
-	GetModuleFileName(NULL, buf2, MAX_PATH);
-	(_tcsrchr(buf2, _T('\\')))[1] = 0;
-	path = buf2;
 	fs.open((path + L"config.dll"), std::ios::out);
 	fs << minimize << std::endl << alert << std::endl << lang << std::endl;
 	fs.close();
@@ -138,6 +130,5 @@ void SettingsDlg::OnBnClickedOk()
 void SettingsDlg::OnBnClickedCancel()
 {
 	// TODO: 在此添加控件通知处理程序代码
-
 	CDialogEx::OnCancel();
 }

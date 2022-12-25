@@ -42,6 +42,12 @@
     <ClInclude Include="DlgNarcissisticNumbers.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgPerfectNumbers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="functions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Factorizer.cpp">
@@ -60,6 +66,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DlgNarcissisticNumbers.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgPerfectNumbers.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="functions.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

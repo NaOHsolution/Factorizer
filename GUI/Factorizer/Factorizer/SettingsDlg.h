@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <locale>
+#include "functions.h"
 
 // SettingsDlg 对话框
 

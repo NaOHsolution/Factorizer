@@ -3,8 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <locale>
-
-ull gcd(ull a, ull b);
+#include "functions.h"
 
 // GCDLCMDlg 对话框
 

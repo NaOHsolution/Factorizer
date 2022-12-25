@@ -10,6 +10,7 @@
 #include "SettingsDlg.h"
 #include "GCDLCMDlg.h"
 #include "DlgNarcissisticNumbers.h"
+#include "DlgPerfectNumbers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -29,59 +30,9 @@ enum indexAbout {
 	aboutTitle, line1, line2, buttonOK
 };
 
-ull primes[100] = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 };
+
 CString caption[60];
 CString captionAbout[10];
-
-std::vector<std::pair<ull, short>> factorize(ull t) {
-	std::vector<std::pair<ull, short>> res;
-	std::wstring buf;
-	short cnt = 0;
-
-	for (int i = 0; i < 25; ++i) {
-		ull p = primes[i];
-		if (t % p == 0) {
-			cnt = 0;
-			while (t % p == 0) t /= p, ++cnt;
-			res.push_back(std::pair<ull, short>(p, cnt));
-		}
-		if (t == 1) return res;
-	}
-	ull f = 102, dest = t / 97;
-	while (f - 1 <= dest) {
-		if (t % (f - 1) == 0) {
-			cnt = 0;
-			while (t % (f - 1) == 0) t /= (f - 1), ++cnt;
-			res.push_back(std::pair<ull, short>(f - 1, cnt));
-			dest = t / (f - 1);
-		}
-		if (t % (f + 1) == 0) {
-			cnt = 0;
-			while (t % (f + 1) == 0) t /= (f + 1), ++cnt;
-			res.push_back(std::pair<ull, short>(f + 1, cnt));
-			dest = t / (f + 1);
-		}
-
-		f += 6;
-	}
-
-	if (t != 1) res.push_back(std::pair<ull, short>(t, 1));
-	return res;
-}
-
-std::vector<ull> factors(ull t) {
-	std::vector<ull> res;
-
-	for (ull i = 1; i <= sqrt(t); ++i) {
-		if (t % i == 0) {
-			res.push_back(i);
-			if (i * i != t) res.push_back(t / i);
-		}
-	}
-	std::sort(res.begin(), res.end());
-
-	return res;
-}
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -160,6 +111,7 @@ BEGIN_MESSAGE_MAP(CFactorizerDlg, CDialogEx)
 	ON_COMMAND(ID_TOOLS_OPENINCOMMANDPROMPT, &CFactorizerDlg::OnToolsOpenincommandprompt)
 	ON_COMMAND(ID_TOOLS_GCDLC, &CFactorizerDlg::OnToolsGcdlc)
 	ON_COMMAND(ID_TOOLS_NARCISSISTICNUMBERS32784, &CFactorizerDlg::OnToolsNarcissisticnumbers32784)
+	ON_COMMAND(ID_TOOLS_PERFECTNUMBERS32783, &CFactorizerDlg::OnToolsPerfectnumbers32783)
 END_MESSAGE_MAP()
 
 
@@ -201,12 +153,8 @@ BOOL CFactorizerDlg::OnInitDialog()
 	std::wstring buf1;
 	CMenu* menu;
 	CMenu* subMenu;
-	TCHAR buf2[MAX_PATH + 1];
-	CString path;
+	CString path = currentPath();
 
-	GetModuleFileName(NULL, buf2, MAX_PATH);
-	(_tcsrchr(buf2, _T('\\')))[1] = 0;
-	path = buf2;
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
@@ -614,13 +562,7 @@ void CFactorizerDlg::OnOptionsAbout()
 void CFactorizerDlg::OnToolsOpenincommandprompt()
 {
 	// TODO: 在此添加命令处理程序代码
-	TCHAR buf2[MAX_PATH + 1];
-	CString path;
-
-	GetModuleFileName(NULL, buf2, MAX_PATH);
-	(_tcsrchr(buf2, _T('\\')))[1] = 0;
-	path = buf2;
-	system(path + ".\\cmdFactorizer.exe");
+	system(currentPath() + ".\\cmdFactorizer.exe");
 }
 
 
@@ -633,12 +575,8 @@ BOOL CAboutDlg::OnInitDialog()
 	std::wstring buf1;
 	bool buf2, buf3;
 	int lang;
-	TCHAR buf4[MAX_PATH + 1];
-	CString path;
+	CString path = currentPath();
 
-	GetModuleFileName(NULL, buf4, MAX_PATH);
-	(_tcsrchr(buf4, _T('\\')))[1] = 0;
-	path = buf4;
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
@@ -691,6 +629,18 @@ void CFactorizerDlg::OnToolsNarcissisticnumbers32784()
 {
 	// TODO: 在此添加命令处理程序代码
 	DlgNarcissisticNumbers dlg;
+	toolsRunning = true;
+	m_status.SetPaneText(2, caption[statusToolsRunning]);
+	dlg.DoModal();
+	toolsRunning = false;
+	m_status.SetPaneText(2, L"");
+}
+
+
+void CFactorizerDlg::OnToolsPerfectnumbers32783()
+{
+	// TODO: 在此添加命令处理程序代码
+	DlgPerfectNumbers dlg;
 	toolsRunning = true;
 	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();

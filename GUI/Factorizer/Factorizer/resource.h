@@ -12,6 +12,7 @@
 #define IDD_DIALOG_SETTINGS             138
 #define IDD_DIALOG_GCDLCM               142
 #define IDD_DIALOG_NARCISSISTICNUMBERS  144
+#define IDD_DIALOG_PERFECTNUMBERS       146
 #define IDC_PROGRESS1                   1004
 #define IDC_PROGRESS_1                  1004
 #define IDC_LIST1                       1006
@@ -28,10 +29,13 @@
 #define IDC_RADIO_4                     1012
 #define IDC_BUTTON2                     1014
 #define IDC_BUTTON_1                    1014
+#define IDC_BUTTON_213                  1014
+#define IDC_BUTTON_4                    1014
 #define IDC_MFCEDITBROWSE2              1023
 #define IDC_MFCEDITBROWSE_1             1023
 #define IDC_BUTTON1                     1026
 #define IDC_BUTTON_2                    1026
+#define IDC_BUTTON_3                    1026
 #define IDC_MFCEDITBROWSE1              1028
 #define IDC_MFCEDITBROWSE_2             1028
 #define IDC_STATIC_1                    1029
@@ -49,6 +53,10 @@
 #define IDC_EDIT4                       1048
 #define IDC_EDIT5                       1049
 #define IDC_EDIT_2                      1050
+#define IDC_EDIT_4                      1052
+#define IDC_EDIT_5                      1053
+#define IDC_STATIC_7                    1054
+#define IDC_EDIT_3                      1055
 #define ID_TOOLS                        32771
 #define ID_32772                        32772
 #define ID_OPTIONS_OPTIONS              32773
@@ -68,9 +76,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        146
+#define _APS_NEXT_RESOURCE_VALUE        148
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1051
+#define _APS_NEXT_CONTROL_VALUE         1056
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

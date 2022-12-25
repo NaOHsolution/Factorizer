@@ -13,6 +13,7 @@
 #include <vector>
 #include <algorithm>
 #include <locale>
+#include "functions.h"
 
 typedef unsigned long long ull;
 
@@ -35,8 +36,6 @@ struct threadInfo {
 };
 
 UINT threadFunc(LPVOID lpParam);
-std::vector<std::pair<ull, short>> factorize(ull t);
-std::vector<ull> factors(ull t);
 
 // CFactorizerDlg 对话框
 class CFactorizerDlg : public CDialogEx
@@ -102,4 +101,5 @@ public:
 	afx_msg void OnToolsOpenincommandprompt();
 	afx_msg void OnToolsGcdlc();
 	afx_msg void OnToolsNarcissisticnumbers32784();
+	afx_msg void OnToolsPerfectnumbers32783();
 };

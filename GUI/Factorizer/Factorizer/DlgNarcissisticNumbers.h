@@ -4,9 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-
-ull power(ull b, int e);
-std::vector<ull> separate(ull t, int r);
+#include "functions.h"
 
 // DlgNarcissisticNumbers 对话框
 

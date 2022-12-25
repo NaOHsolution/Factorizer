@@ -12,21 +12,6 @@ enum indexNarcissisticNumbers {
 
 CString captionNarcissisticNumbers[10];
 
-ull power(ull b, int e) {
-	ull ret = 1;
-	for (int i = 0; i < e; ++i) ret *= b;
-	return ret;
-}
-
-std::vector<ull> separate(ull t, int r) {
-	std::vector<ull> ret;
-	while (t != 0) {
-		ret.push_back(t % r);
-		t /= r;
-	}
-	return ret;
-}
-
 // DlgNarcissisticNumbers 对话框
 
 IMPLEMENT_DYNAMIC(DlgNarcissisticNumbers, CDialogEx)
@@ -64,14 +49,10 @@ BOOL DlgNarcissisticNumbers::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	std::wfstream fs;
 	std::wstring buf4;
-	TCHAR buf1[MAX_PATH + 1];
-	CString path;
+	CString path = currentPath();
 	bool buf2, buf3;
 	int lang;
 
-	GetModuleFileName(NULL, buf1, MAX_PATH);
-	(_tcsrchr(buf1, _T('\\')))[1] = 0;
-	path = buf1;
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Configuration file not found.", L"Fatal Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
@@ -106,7 +87,7 @@ BOOL DlgNarcissisticNumbers::OnInitDialog()
 	SetDlgItemText(IDC_STATIC_2, captionNarcissisticNumbers[textResult]);
 	SetDlgItemText(IDC_BUTTON_1, captionNarcissisticNumbers[buttonTest]);
 	m_edit1.SetWindowText(L"153");
-	m_edit1.SetLimitText(15);
+	m_edit1.SetLimitText(9);
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
@@ -120,9 +101,9 @@ void DlgNarcissisticNumbers::OnBnClickedButton1()
 	ull t, s = 0;
 	int n;
 	std::wstringstream buf1;
-	wchar_t buf2[20];
+	wchar_t buf2[10];
 
-	m_edit1.GetWindowText(buf2, 20);
+	m_edit1.GetWindowText(buf2, 10);
 	buf1 << buf2;
 	buf1 >> t;
 	num = separate(t, 10);

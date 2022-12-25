@@ -6,12 +6,6 @@
 #include "GCDLCMDlg.h"
 #include "afxdialogex.h"
 
-ull gcd(ull a, ull b) {
-	ull smallNum = (a > b ? b : a), bigNum = (a > b ? a : b);
-	if (bigNum % smallNum == 0) return smallNum;
-	return gcd(smallNum, bigNum % smallNum);
-}
-
 enum indexGCDLCM {
 	GCDLCMTitle, textFirstNumber, textSecondNumber, buttonCompute, groupResult, textGCD, textLCM
 };
@@ -58,12 +52,8 @@ BOOL GCDLCMDlg::OnInitDialog()
 	std::wstring buf1;
 	bool buf2, buf3;
 	int lang;
-	TCHAR buf4[MAX_PATH + 1];
-	CString path;
+	CString path = currentPath();
 
-	GetModuleFileName(NULL, buf4, MAX_PATH);
-	(_tcsrchr(buf4, _T('\\')))[1] = 0;
-	path = buf4;
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
