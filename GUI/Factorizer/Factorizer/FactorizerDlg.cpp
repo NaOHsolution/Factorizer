@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include "SettingsDlg.h"
 #include "GCDLCMDlg.h"
+#include "DlgNarcissisticNumbers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -158,6 +159,7 @@ BEGIN_MESSAGE_MAP(CFactorizerDlg, CDialogEx)
 	ON_COMMAND(ID_OPTIONS_ABOUT, &CFactorizerDlg::OnOptionsAbout)
 	ON_COMMAND(ID_TOOLS_OPENINCOMMANDPROMPT, &CFactorizerDlg::OnToolsOpenincommandprompt)
 	ON_COMMAND(ID_TOOLS_GCDLC, &CFactorizerDlg::OnToolsGcdlc)
+	ON_COMMAND(ID_TOOLS_NARCISSISTICNUMBERS32784, &CFactorizerDlg::OnToolsNarcissisticnumbers32784)
 END_MESSAGE_MAP()
 
 
@@ -677,6 +679,18 @@ void CFactorizerDlg::OnToolsGcdlc()
 {
 	// TODO: 在此添加命令处理程序代码
 	GCDLCMDlg dlg;
+	toolsRunning = true;
+	m_status.SetPaneText(2, caption[statusToolsRunning]);
+	dlg.DoModal();
+	toolsRunning = false;
+	m_status.SetPaneText(2, L"");
+}
+
+
+void CFactorizerDlg::OnToolsNarcissisticnumbers32784()
+{
+	// TODO: 在此添加命令处理程序代码
+	DlgNarcissisticNumbers dlg;
 	toolsRunning = true;
 	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();

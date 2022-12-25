@@ -35,6 +35,8 @@ struct threadInfo {
 };
 
 UINT threadFunc(LPVOID lpParam);
+std::vector<std::pair<ull, short>> factorize(ull t);
+std::vector<ull> factors(ull t);
 
 // CFactorizerDlg 对话框
 class CFactorizerDlg : public CDialogEx
@@ -99,4 +101,5 @@ public:
 	afx_msg void OnOptionsAbout();
 	afx_msg void OnToolsOpenincommandprompt();
 	afx_msg void OnToolsGcdlc();
+	afx_msg void OnToolsNarcissisticnumbers32784();
 };

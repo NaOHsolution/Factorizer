@@ -11,6 +11,7 @@
 #define IDR_MENU1                       130
 #define IDD_DIALOG_SETTINGS             138
 #define IDD_DIALOG_GCDLCM               142
+#define IDD_DIALOG_NARCISSISTICNUMBERS  144
 #define IDC_PROGRESS1                   1004
 #define IDC_PROGRESS_1                  1004
 #define IDC_LIST1                       1006
@@ -47,6 +48,7 @@
 #define IDC_EDIT1                       1045
 #define IDC_EDIT4                       1048
 #define IDC_EDIT5                       1049
+#define IDC_EDIT_2                      1050
 #define ID_TOOLS                        32771
 #define ID_32772                        32772
 #define ID_OPTIONS_OPTIONS              32773
@@ -66,9 +68,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        144
+#define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1050
+#define _APS_NEXT_CONTROL_VALUE         1051
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

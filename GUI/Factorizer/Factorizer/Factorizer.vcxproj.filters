@@ -39,6 +39,9 @@
     <ClInclude Include="GCDLCMDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgNarcissisticNumbers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Factorizer.cpp">
@@ -54,6 +57,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GCDLCMDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgNarcissisticNumbers.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

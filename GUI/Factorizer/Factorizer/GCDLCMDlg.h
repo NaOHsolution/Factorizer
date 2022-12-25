@@ -4,6 +4,8 @@
 #include <sstream>
 #include <locale>
 
+ull gcd(ull a, ull b);
+
 // GCDLCMDlg 对话框
 
 class GCDLCMDlg : public CDialogEx
