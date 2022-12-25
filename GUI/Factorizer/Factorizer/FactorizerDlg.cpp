@@ -6,11 +6,12 @@
 #include "framework.h"
 #include "Factorizer.h"
 #include "FactorizerDlg.h"
-#include "afxdialogex.h"
 #include "SettingsDlg.h"
 #include "GCDLCMDlg.h"
 #include "DlgNarcissisticNumbers.h"
 #include "DlgPerfectNumbers.h"
+#include "DlgBaseConversion.h"
+#include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -112,6 +113,7 @@ BEGIN_MESSAGE_MAP(CFactorizerDlg, CDialogEx)
 	ON_COMMAND(ID_TOOLS_GCDLC, &CFactorizerDlg::OnToolsGcdlc)
 	ON_COMMAND(ID_TOOLS_NARCISSISTICNUMBERS32784, &CFactorizerDlg::OnToolsNarcissisticnumbers32784)
 	ON_COMMAND(ID_TOOLS_PERFECTNUMBERS32783, &CFactorizerDlg::OnToolsPerfectnumbers32783)
+	ON_COMMAND(ID_TOOLS_BASECONVERSION, &CFactorizerDlg::OnToolsBaseconversion)
 END_MESSAGE_MAP()
 
 
@@ -187,7 +189,6 @@ BOOL CFactorizerDlg::OnInitDialog()
 	}
 	fs.close();
 
-	toolsRunning = false;
 	m_progress1.SetRange(0, 99);
 	m_radio1.SetCheck(BST_CHECKED);
 	m_radio3.SetCheck(BST_CHECKED);
@@ -313,7 +314,6 @@ void CFactorizerDlg::OnBnClickedButton1()
 	Info.status = &m_status;
 	Info.minimize = minimizeWhenComputing;
 	Info.alert = alertWhenDone;
-	Info.toolRunning = toolsRunning;
 	m_progress1.SetRange(0, 100);
 
 	if (m_radio1.GetCheck() == BST_CHECKED) {
@@ -541,10 +541,8 @@ void CFactorizerDlg::OnOptionsOptions()
 {
 	// TODO: 在此添加命令处理程序代码
 	SettingsDlg dlg;
-	toolsRunning = true;
 	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
-	toolsRunning = false;
 	m_status.SetPaneText(2, L"");
 }
 
@@ -617,10 +615,8 @@ void CFactorizerDlg::OnToolsGcdlc()
 {
 	// TODO: 在此添加命令处理程序代码
 	GCDLCMDlg dlg;
-	toolsRunning = true;
 	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
-	toolsRunning = false;
 	m_status.SetPaneText(2, L"");
 }
 
@@ -629,10 +625,8 @@ void CFactorizerDlg::OnToolsNarcissisticnumbers32784()
 {
 	// TODO: 在此添加命令处理程序代码
 	DlgNarcissisticNumbers dlg;
-	toolsRunning = true;
 	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
-	toolsRunning = false;
 	m_status.SetPaneText(2, L"");
 }
 
@@ -641,9 +635,17 @@ void CFactorizerDlg::OnToolsPerfectnumbers32783()
 {
 	// TODO: 在此添加命令处理程序代码
 	DlgPerfectNumbers dlg;
-	toolsRunning = true;
 	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
-	toolsRunning = false;
+	m_status.SetPaneText(2, L"");
+}
+
+
+void CFactorizerDlg::OnToolsBaseconversion()
+{
+	// TODO: 在此添加命令处理程序代码
+	DlgBaseConversion dlg;
+	m_status.SetPaneText(2, caption[statusToolsRunning]);
+	dlg.DoModal();
 	m_status.SetPaneText(2, L"");
 }

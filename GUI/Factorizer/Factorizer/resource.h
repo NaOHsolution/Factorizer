@@ -13,6 +13,7 @@
 #define IDD_DIALOG_GCDLCM               142
 #define IDD_DIALOG_NARCISSISTICNUMBERS  144
 #define IDD_DIALOG_PERFECTNUMBERS       146
+#define IDD_DIALOG_BASECONVERSION       148
 #define IDC_PROGRESS1                   1004
 #define IDC_PROGRESS_1                  1004
 #define IDC_LIST1                       1006
@@ -56,6 +57,7 @@
 #define IDC_EDIT_5                      1053
 #define IDC_STATIC_7                    1054
 #define IDC_EDIT_3                      1055
+#define IDC_COMBO_2                     1057
 #define ID_TOOLS                        32771
 #define ID_32772                        32772
 #define ID_OPTIONS_OPTIONS              32773
@@ -75,9 +77,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        148
+#define _APS_NEXT_RESOURCE_VALUE        152
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1056
+#define _APS_NEXT_CONTROL_VALUE         1058
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

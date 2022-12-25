@@ -64,19 +64,17 @@ BOOL SettingsDlg::OnInitDialog()
 	
 	if (minimize) m_check1.SetCheck(BST_CHECKED);
 	if (alert) m_check2.SetCheck(BST_CHECKED);
-	m_combo1.AddString(L"简体中文");
-	m_combo1.AddString(L"English");
 	
 	switch (lang) {
 	case english:
 		fs.open(path + L"lang\\english_settings.lang", std::ios::in);
-		SetDlgItemText(IDC_COMBO_1, L"English");
+		m_combo1.SetCurSel(english);
 		break;
 	case simplifiedChinese:
 		std::locale simplifiedChinese("zh_CN.UTF-8");
 		fs.imbue(simplifiedChinese);
 		fs.open(path + L"lang\\simpchinese_settings.lang", std::ios::in);
-		SetDlgItemText(IDC_COMBO_1, L"简体中文");
+		m_combo1.SetCurSel(languages::simplifiedChinese);
 		break;
 	}
 	if (!fs.is_open()) {
@@ -115,9 +113,14 @@ void SettingsDlg::OnBnClickedOk()
 	else minimize = false;
 	if (m_check2.GetCheck() == BST_CHECKED) alert = true;
 	else alert = false;
-	GetDlgItemText(IDC_COMBO_1, buf1);
-	if (buf1 == L"English") lang = english;
-	if (buf1 == L"简体中文") lang = simplifiedChinese;
+	switch (m_combo1.GetCurSel()) {
+	case english:
+		lang = english;
+		break;
+	case simplifiedChinese:
+		lang = simplifiedChinese;
+		break;
+	}
 
 	fs.open((path + L"config.dll"), std::ios::out);
 	fs << minimize << std::endl << alert << std::endl << lang << std::endl;

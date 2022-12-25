@@ -32,7 +32,6 @@ struct threadInfo {
 
 	bool minimize;
 	bool alert;
-	bool toolRunning;
 };
 
 UINT threadFunc(LPVOID lpParam);
@@ -94,7 +93,6 @@ public:
 	bool minimizeWhenComputing;
 	bool alertWhenDone;
 	int lang;
-	bool toolsRunning;
 	afx_msg void OnToolsCalculator();
 	afx_msg void OnOptionsOptions();
 	afx_msg void OnOptionsAbout();
@@ -102,4 +100,5 @@ public:
 	afx_msg void OnToolsGcdlc();
 	afx_msg void OnToolsNarcissisticnumbers32784();
 	afx_msg void OnToolsPerfectnumbers32783();
+	afx_msg void OnToolsBaseconversion();
 };

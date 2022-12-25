@@ -1,8 +1,8 @@
-﻿  DlgPerfectNumbers.cpp
+﻿  DlgBaseConversion.cpp
 D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\Factorizer\Factorizer.h(17,2): warning C4091: “extern ”: 没有声明变量时忽略“languages”的左侧
   正在生成代码
-  3 of 785 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  2 of 799 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Factorizer.vcxproj -> D:\编程\C++\Factorizer\Factorizer\GUI\Factorizer\x64\Release\Factorizer.exe
