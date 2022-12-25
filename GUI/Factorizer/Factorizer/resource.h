@@ -29,7 +29,6 @@
 #define IDC_RADIO_4                     1012
 #define IDC_BUTTON2                     1014
 #define IDC_BUTTON_1                    1014
-#define IDC_BUTTON_213                  1014
 #define IDC_BUTTON_4                    1014
 #define IDC_MFCEDITBROWSE2              1023
 #define IDC_MFCEDITBROWSE_1             1023

@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 enum indexGCDLCM {
-	GCDLCMTitle, textFirstNumber, textSecondNumber, buttonCompute, groupResult, textGCD, textLCM
+	GCDLCMTitle, textFirstNumber, textSecondNumber, buttonCompute, groupResult, textGCD, textLCM, resultUndefined
 };
 CString captionGCDLCM[10];
 
@@ -75,7 +75,7 @@ BOOL GCDLCMDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 7; ++i) {
+	for (int i = 0; i < 8; ++i) {
 		std::getline(fs, buf1, L'\n');
 		captionGCDLCM[i] = buf1.c_str();
 	}
@@ -109,6 +109,11 @@ void GCDLCMDlg::OnBnClickedButton1()
 	m_edit2.GetWindowText(buf1);
 	buf2 << buf1.GetString();
 	buf2 >> x >> y;
+	if (x == 0 || y == 0) {
+		m_edit3.SetWindowText(captionGCDLCM[resultUndefined]);
+		m_edit4.SetWindowText(captionGCDLCM[resultUndefined]);
+		return;
+	}
 	res = gcd(x, y);
 	_ui64tow_s(res, buf3, 30, 10);
 	m_edit3.SetWindowText(buf3);

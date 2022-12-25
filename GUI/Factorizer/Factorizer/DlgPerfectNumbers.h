@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#include <fstream>
+#include <sstream>
+#include <locale>
+#include "functions.h"
 
 // DlgPerfectNumbers 对话框
 
@@ -34,4 +38,7 @@ public:
 	CEdit m_edit3;
 	CEdit m_edit4;
 	CEdit m_edit5;
+	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedButton3();
+	afx_msg void OnBnClickedButton4();
 };
