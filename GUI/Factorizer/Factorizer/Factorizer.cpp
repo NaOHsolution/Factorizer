@@ -135,8 +135,8 @@ void CMyListCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) {
 	}
 	GetItemRect(nItem, rcItem, LVIR_LABEL);
 	rcItem2 = rcItem;
-	rcItem2.left += offset;
-	rcItem2.right += offset;
+	// rcItem2.left += offset;
+	// rcItem2.right += offset;
 	pDC->DrawText(szBuff, -1, rcItem2, DT_LEFT | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP | DT_VCENTER | DT_END_ELLIPSIS);
 
 	LV_COLUMN lvc;

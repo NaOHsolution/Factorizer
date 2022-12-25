@@ -22,7 +22,7 @@ enum indexFactorizer {
 	statusReady, statusComputation, statusReading, statusWriting, boxWarning, boxNumberError, boxFileError, boxNotANumber, 
 	boxZero, boxOutOfRange, boxInputEmpty, boxInputFileEmpty, boxInputFileNotFound, boxOutputFileNotFound, boxComplete,
 	boxOutputComplete, boxOutputEmpty, menuTools, menuCommandLine, menuCalculator, menuOptions, menuOptions2, menuAbout,
-	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers
+	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers, statusToolsRunning,
 };
 enum indexAbout {
 	aboutTitle, line1, line2, buttonOK
@@ -231,12 +231,13 @@ BOOL CFactorizerDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 44; ++i) {
+	for (int i = 0; i < 45; ++i) {
 		std::getline(fs, buf1, L'\n');
 		caption[i] = buf1.c_str();
 	}
 	fs.close();
 
+	toolsRunning = false;
 	m_progress1.SetRange(0, 99);
 	m_radio1.SetCheck(BST_CHECKED);
 	m_radio3.SetCheck(BST_CHECKED);
@@ -275,9 +276,10 @@ BOOL CFactorizerDlg::OnInitDialog()
 	subMenu->ModifyMenu(2, MF_BYPOSITION, ID_OPTIONS_ABOUT, caption[menuAbout]);
 
 	m_status.Create(this);
-	m_status.SetIndicators(nID, 2);
-	m_status.SetPaneInfo(0, 0, SBPS_NORMAL, 100);
-	m_status.SetPaneInfo(1, 1, SBPS_NORMAL, 250);
+	m_status.SetIndicators(nID, 3);
+	m_status.SetPaneInfo(0, 0, SBPS_NORMAL, 75);
+	m_status.SetPaneInfo(1, 1, SBPS_NORMAL, 175);
+	m_status.SetPaneInfo(2, 2, SBPS_NORMAL, 175);
 	GetClientRect(&rect);
 	m_status.MoveWindow(0, rect.bottom - 30, rect.right, 30);
 	
@@ -361,6 +363,7 @@ void CFactorizerDlg::OnBnClickedButton1()
 	Info.status = &m_status;
 	Info.minimize = minimizeWhenComputing;
 	Info.alert = alertWhenDone;
+	Info.toolRunning = toolsRunning;
 	m_progress1.SetRange(0, 100);
 
 	if (m_radio1.GetCheck() == BST_CHECKED) {
@@ -588,7 +591,11 @@ void CFactorizerDlg::OnOptionsOptions()
 {
 	// TODO: 在此添加命令处理程序代码
 	SettingsDlg dlg;
+	toolsRunning = true;
+	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
+	toolsRunning = false;
+	m_status.SetPaneText(2, L"");
 }
 
 
@@ -596,7 +603,9 @@ void CFactorizerDlg::OnOptionsAbout()
 {
 	// TODO: 在此添加命令处理程序代码
 	CAboutDlg dlg;
+	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
+	m_status.SetPaneText(2, L"");
 }
 
 
@@ -668,5 +677,9 @@ void CFactorizerDlg::OnToolsGcdlc()
 {
 	// TODO: 在此添加命令处理程序代码
 	GCDLCMDlg dlg;
+	toolsRunning = true;
+	m_status.SetPaneText(2, caption[statusToolsRunning]);
 	dlg.DoModal();
+	toolsRunning = false;
+	m_status.SetPaneText(2, L"");
 }

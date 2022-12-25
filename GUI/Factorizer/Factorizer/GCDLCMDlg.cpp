@@ -96,8 +96,8 @@ BOOL GCDLCMDlg::OnInitDialog()
 	SetDlgItemText(IDC_STATIC_5, captionGCDLCM[textLCM]);
 	SetDlgItemText(IDC_STATIC_3, captionGCDLCM[groupResult]);
 	SetDlgItemText(IDC_BUTTON_1, captionGCDLCM[buttonCompute]);
-	m_edit1.SetLimitText(10);
-	m_edit2.SetLimitText(10);
+	m_edit1.SetLimitText(9);
+	m_edit2.SetLimitText(9);
 	m_edit1.SetWindowText(L"2");
 	m_edit2.SetWindowText(L"8");
 
