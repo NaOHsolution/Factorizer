@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include "functions.h"
@@ -38,4 +39,5 @@ public:
 	CEdit m_edit1;
 	CEdit m_edit2;
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnCbnSelchangeCombo1();
 };

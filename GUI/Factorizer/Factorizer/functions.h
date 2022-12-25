@@ -15,5 +15,8 @@ ull gcd(ull a, ull b); // find the greatest common denominator of a and b
 ull power(ull b, int e); // raise b to the power e
 std::vector<ull> separate(ull t, int r); // separate the number t into digits (r as radix)
 CString currentPath(); // get the directory of the .exe file
+ull toDec(std::vector<ull> n, int r); // convert a number n with radix r to a decimal
+std::vector<ull> fromDec(ull n, int r); // convert a decimal n to a number with radix r
+std::vector<ull> convert(std::vector<ull> n, int from, int to); // convert a number n from a radix to another radix
 
 #endif  // _FUNCTIONS_H_

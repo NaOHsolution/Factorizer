@@ -83,3 +83,28 @@ CString currentPath() {
 
 	return ret;
 }
+
+ull toDec(std::vector<ull> n, int r) {
+	ull res = 0;
+	int e = 0;
+
+	for (std::vector<ull>::reverse_iterator itr = n.rbegin(); itr != n.rend(); ++itr, ++e) res += *itr * power(r, e);
+
+	return res;
+}
+
+std::vector<ull> fromDec(ull n, int r) {
+	std::vector<ull> t, res;
+
+	while (n != 0) {
+		t.push_back(n % r);
+		n /= r;
+	}
+	for (std::vector<ull>::reverse_iterator itr = t.rbegin(); itr != t.rend(); ++itr) res.push_back(*itr);
+
+	return res;
+}
+
+std::vector<ull> convert(std::vector<ull> n, int from, int to) {
+	return fromDec(toDec(n, from), to);
+}
