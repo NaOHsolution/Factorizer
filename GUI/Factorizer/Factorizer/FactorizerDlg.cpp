@@ -25,7 +25,7 @@ enum indexFactorizer {
 	statusReady, statusComputation, statusReading, statusWriting, boxWarning, boxNumberError, boxFileError, boxNotANumber, 
 	boxZero, boxOutOfRange, boxInputEmpty, boxInputFileEmpty, boxInputFileNotFound, boxOutputFileNotFound, boxComplete,
 	boxOutputComplete, boxOutputEmpty, menuTools, menuCommandLine, menuCalculator, menuOptions, menuOptions2, menuAbout,
-	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers, statusToolsRunning,
+	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers, statusToolsRunning, boxNoExternalPrimeLibrary
 };
 enum indexAbout {
 	aboutTitle, line1, line2, buttonOK
@@ -157,12 +157,14 @@ BOOL CFactorizerDlg::OnInitDialog()
 	CMenu* subMenu;
 	CString path = currentPath();
 
+	fs.imbue(std::locale("zh_CN.UTF-8"));
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
 		MessageBox(L"Cannot open configuration file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	fs >> minimizeWhenComputing >> alertWhenDone >> lang;
+	fs >> minimizeWhenComputing >> alertWhenDone >> lang >> useExternal;
+	if (useExternal) fs >> externalPath;
 	fs.close();
 
 	switch (lang) {
@@ -183,7 +185,7 @@ BOOL CFactorizerDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 45; ++i) {
+	for (int i = 0; i < 46; ++i) {
 		std::getline(fs, buf1, L'\n');
 		caption[i] = buf1.c_str();
 	}
@@ -314,6 +316,16 @@ void CFactorizerDlg::OnBnClickedButton1()
 	Info.status = &m_status;
 	Info.minimize = minimizeWhenComputing;
 	Info.alert = alertWhenDone;
+	Info.external = useExternal;
+	if (useExternal) {
+		Info.path = externalPath;
+		fs.open(externalPath, std::ios::in);
+		if (!fs.is_open()) {
+			MessageBox(caption[boxNoExternalPrimeLibrary], caption[boxFileError], MB_ICONWARNING | MB_OK | MB_APPLMODAL);
+			Info.external = false;
+		}
+		else fs.close();
+	}
 	m_progress1.SetRange(0, 100);
 
 	if (m_radio1.GetCheck() == BST_CHECKED) {
@@ -404,7 +416,7 @@ UINT threadFunc(LPVOID lpParam) {
 			resultp.clear();
 			wss.clear();
 			wss.str(L"");
-			resultp = factorize(*itr0);
+			resultp = factorize(*itr0, pInfo->external, pInfo->path);
 
 			for (std::vector<std::pair<ull, short>>::iterator itr = resultp.begin(); itr != resultp.end(); ++itr) {
 				wss << itr->first;
@@ -501,6 +513,7 @@ void CFactorizerDlg::OnBnClickedButton2()
 	m_status.SetPaneText(1, caption[statusWriting]);
 
 	m_browse2.GetWindowText(buf1);
+	if (lang == simplifiedChinese) fs.imbue(std::locale("zh_CN.UTF-8"));
 	fs.open(buf1.GetString(), std::ios::out);
 	if (!fs.is_open()) {
 		m_button1.EnableWindow(true);

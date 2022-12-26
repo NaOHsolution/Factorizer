@@ -1,22 +1,50 @@
 #include "pch.h"
 #include "functions.h"
 
+// 48719827982179811
+
 const ull primes[100] = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 };
 
-std::vector<std::pair<ull, short>> factorize(ull t) {
+std::vector<std::pair<ull, short>> factorize(ull t, bool external, std::wstring path) {
 	std::vector<std::pair<ull, short>> res;
+	std::wfstream fs;
+	std::wstringstream buf1;
+	std::wstring buf2;
+	ull p = 97; // I don't understand why I need to initialize this
 	short cnt = 0;
-
-	for (int i = 0; i < 25; ++i) {
-		ull p = primes[i];
-		if (t % p == 0) {
-			cnt = 0;
-			while (t % p == 0) t /= p, ++cnt;
-			res.push_back(std::pair<ull, short>(p, cnt));
+	
+	if (external) {
+		fs.open(path, std::ios::in);
+		while (!fs.eof()) {
+			buf1.clear();
+			buf1.str(L"");
+			fs >> buf2;
+			buf1 << buf2;
+			buf1 >> p;
+			if (t % p == 0) {
+				cnt = 0;
+				while (t % p == 0) t /= p, ++cnt;
+				res.push_back(std::pair<ull, short>(p, cnt));
+			}
+			if (t == 1) {
+				fs.close();
+				return res;
+			}
 		}
-		if (t == 1) return res;
+		fs.close();
 	}
-	ull f = 102, dest = t / 97;
+	else {
+		for (int i = 0; i < 25; ++i) {
+			p = primes[i];
+			if (t % p == 0) {
+				cnt = 0;
+				while (t % p == 0) t /= p, ++cnt;
+				res.push_back(std::pair<ull, short>(p, cnt));
+			}
+			if (t == 1) return res;
+		}
+	}
+	ull f = 102, dest = t / p;
 	while (f - 1 <= dest) {
 		if (t % (f - 1) == 0) {
 			cnt = 0;

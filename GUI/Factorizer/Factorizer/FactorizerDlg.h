@@ -32,6 +32,8 @@ struct threadInfo {
 
 	bool minimize;
 	bool alert;
+	bool external;
+	std::wstring path;
 };
 
 UINT threadFunc(LPVOID lpParam);
@@ -93,6 +95,8 @@ public:
 	bool minimizeWhenComputing;
 	bool alertWhenDone;
 	int lang;
+	bool useExternal;
+	std::wstring externalPath;
 	afx_msg void OnToolsCalculator();
 	afx_msg void OnOptionsOptions();
 	afx_msg void OnOptionsAbout();

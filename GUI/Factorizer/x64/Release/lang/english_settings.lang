@@ -7,4 +7,9 @@ Cancel
 Appearance
 Language
 Will take effect after restarting program.
+Use external prime library when factorizing (recommended)
+Error
+Cannot open external prime library.
+
+
 

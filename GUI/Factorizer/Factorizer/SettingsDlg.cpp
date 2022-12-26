@@ -8,10 +8,10 @@
 
 enum indexSettings {
 	settingsTitle, groupComputation, checkMinimize, checkAlert, buttonConfirm, buttonCancel, groupAppearance, textLanguage,
-	hintLanguage,
+	hintLanguage, checkUseExternal, boxError, boxCannotOpenExternalFile
 };
 
-CString captionSettings[50];
+CString captionSettings[20];
 
 // SettingsDlg 对话框
 
@@ -33,12 +33,15 @@ void SettingsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_1, m_check1);
 	DDX_Control(pDX, IDC_CHECK_2, m_check2);
 	DDX_Control(pDX, IDC_COMBO_1, m_combo1);
+	DDX_Control(pDX, IDC_CHECK_3, m_check3);
+	DDX_Control(pDX, IDC_MFCEDITBROWSE_1, m_browse1);
 }
 
 
 BEGIN_MESSAGE_MAP(SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &SettingsDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDC_CANCEL, &SettingsDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_CHECK_3, &SettingsDlg::OnBnClickedCheck3)
 END_MESSAGE_MAP()
 
 
@@ -56,14 +59,23 @@ BOOL SettingsDlg::OnInitDialog()
 
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
-		MessageBox(L"Configuration file not found.", L"Fatal Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		MessageBox(L"Cannot open configuration file.", L"Fatal Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	fs >> minimize >> alert >> lang;
+	fs >> minimize >> alert >> lang >> useExternal;
+	if (useExternal) {
+		fs.imbue(std::locale("zh_CN.UTF-8"));
+		fs >> externalPath;
+	}
 	fs.close();
 	
 	if (minimize) m_check1.SetCheck(BST_CHECKED);
 	if (alert) m_check2.SetCheck(BST_CHECKED);
+	if (useExternal) {
+		m_check3.SetCheck(BST_CHECKED);
+		m_browse1.SetWindowText(externalPath.c_str());
+	}
+	else m_browse1.EnableWindow(false);
 	
 	switch (lang) {
 	case english:
@@ -81,7 +93,7 @@ BOOL SettingsDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 9; ++i) {
+	for (int i = 0; i < 12; ++i) {
 		std::getline(fs, buf1, L'\n');
 		captionSettings[i] = buf1.c_str();
 	}
@@ -96,6 +108,7 @@ BOOL SettingsDlg::OnInitDialog()
 	SetDlgItemText(IDC_STATIC_2, captionSettings[groupAppearance]);
 	SetDlgItemText(IDC_STATIC_3, captionSettings[textLanguage]);
 	SetDlgItemText(IDC_STATIC_4, captionSettings[hintLanguage]);
+	SetDlgItemText(IDC_CHECK_3, captionSettings[checkUseExternal]);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
@@ -106,6 +119,7 @@ void SettingsDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	std::wfstream fs;
+	FILE* f;
 	CString buf1;
 	CString path = currentPath();
 
@@ -113,6 +127,12 @@ void SettingsDlg::OnBnClickedOk()
 	else minimize = false;
 	if (m_check2.GetCheck() == BST_CHECKED) alert = true;
 	else alert = false;
+	if (m_check3.GetCheck() == BST_CHECKED) {
+		useExternal = true;
+		m_browse1.GetWindowText(buf1);
+		externalPath = buf1.GetString();
+	}
+	else useExternal = false;
 	switch (m_combo1.GetCurSel()) {
 	case english:
 		lang = english;
@@ -121,9 +141,22 @@ void SettingsDlg::OnBnClickedOk()
 		lang = simplifiedChinese;
 		break;
 	}
+	if (useExternal) {
+		fs.open(externalPath, std::ios::in);
+		if (!fs.is_open()) {
+			MessageBox(captionSettings[boxCannotOpenExternalFile], captionSettings[boxError], MB_OK | MB_ICONERROR | MB_APPLMODAL);
+			fs.close();
+			return;
+		}
+		fs.close();
+	}
 
 	fs.open((path + L"config.dll"), std::ios::out);
-	fs << minimize << std::endl << alert << std::endl << lang << std::endl;
+	fs << minimize << std::endl << alert << std::endl << lang << std::endl << useExternal << std::endl;
+	if (useExternal) {
+		fs.imbue(std::locale("zh_CN.UTF-8"));
+		fs << externalPath << std::endl;
+	}
 	fs.close();
 
 	CDialogEx::OnOK();
@@ -134,4 +167,12 @@ void SettingsDlg::OnBnClickedCancel()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnCancel();
+}
+
+
+void SettingsDlg::OnBnClickedCheck3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (m_check3.GetCheck() == BST_CHECKED) m_browse1.EnableWindow(true);
+	else m_browse1.EnableWindow(false);
 }

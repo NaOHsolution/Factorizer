@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <tchar.h>
 #include <fstream>
 #include <string>
 #include <locale>
@@ -36,10 +37,15 @@ public:
 	bool minimize;
 	bool alert;
 	int lang;
+	bool useExternal;
+	std::wstring externalPath;
 	CButton m_check1;
 	CButton m_check2;
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedOk();
 	CComboBox m_combo1;
 	afx_msg void OnBnClickedCancel();
+	CButton m_check3;
+	CMFCEditBrowseCtrl m_browse1;
+	afx_msg void OnBnClickedCheck3();
 };

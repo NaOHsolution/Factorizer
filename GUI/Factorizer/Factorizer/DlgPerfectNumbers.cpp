@@ -60,7 +60,7 @@ BOOL DlgPerfectNumbers::OnInitDialog()
 
 	fs.open(path + L"config.dll", std::ios::in);
 	if (!fs.is_open()) {
-		MessageBox(L"Configuration file not found.", L"Fatal Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
+		MessageBox(L"Cannot open configuration file.", L"Fatal Error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
 	fs >> buf2 >> buf3 >> lang;
