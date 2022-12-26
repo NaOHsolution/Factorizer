@@ -25,7 +25,8 @@ enum indexFactorizer {
 	statusReady, statusComputation, statusReading, statusWriting, boxWarning, boxNumberError, boxFileError, boxNotANumber, 
 	boxZero, boxOutOfRange, boxInputEmpty, boxInputFileEmpty, boxInputFileNotFound, boxOutputFileNotFound, boxComplete,
 	boxOutputComplete, boxOutputEmpty, menuTools, menuCommandLine, menuCalculator, menuOptions, menuOptions2, menuAbout,
-	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers, statusToolsRunning, boxNoExternalPrimeLibrary
+	menuGCDLCM, menuBaseConversion, menuNarcissisticNumbers, menuPerfectNumbers, statusToolsRunning, boxNoExternalPrimeLibrary,
+	boxAlreadyRunning
 };
 enum indexAbout {
 	aboutTitle, line1, line2, buttonOK
@@ -185,18 +186,28 @@ BOOL CFactorizerDlg::OnInitDialog()
 		MessageBox(L"Cannot open language file.", L"Fatal error", MB_OK | MB_ICONERROR | MB_APPLMODAL);
 		abort();
 	}
-	for (int i = 0; i < 46; ++i) {
+	for (int i = 0; i < 47; ++i) {
 		std::getline(fs, buf1, L'\n');
 		caption[i] = buf1.c_str();
 	}
 	fs.close();
+
+	HANDLE hMutex = CreateMutex(NULL, TRUE, L"Factorizer");
+	if (hMutex)
+	{
+		if (ERROR_ALREADY_EXISTS == GetLastError())
+		{
+			MessageBox(caption[boxAlreadyRunning], caption[boxWarning], MB_ICONWARNING | MB_OK | MB_APPLMODAL);
+			abort();
+		}
+	}
 
 	m_progress1.SetRange(0, 99);
 	m_radio1.SetCheck(BST_CHECKED);
 	m_radio3.SetCheck(BST_CHECKED);
 	m_list1.SetView(LVS_REPORT);
 	m_list1.SetExtendedStyle(LVS_EX_GRIDLINES);
-	m_list1.InsertColumn(0, L"ID", LVS_ALIGNLEFT, 30);
+	m_list1.InsertColumn(0, L"ID", LVS_ALIGNLEFT, 50);
 	m_list1.InsertColumn(1, caption[listColumnNumber], LVS_ALIGNLEFT, 150);
 	m_list1.InsertColumn(2, caption[listColumnResult], LVS_ALIGNLEFT, 100);
 	m_list1.InsertColumn(3, caption[listColumnDetail], LVS_ALIGNLEFT, 2500);
